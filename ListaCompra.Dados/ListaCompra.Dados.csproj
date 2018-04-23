@@ -8,4 +8,9 @@
     <ProjectReference Include="..\ListaCompra.Modelo\ListaCompra.Modelo.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Agente\" />
+    <Folder Include="Dados\" />
+  </ItemGroup>
+
 </Project>
