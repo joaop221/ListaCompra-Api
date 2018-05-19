@@ -17,7 +17,7 @@ namespace ListaCompra.Negocio
 		/// <returns></returns>
 		public bool Criar(Usuario usuario)
 		{
-
+			return true;
 		}
     }
 }

@@ -20,9 +20,14 @@ namespace ListaCompra.Modelo
 		public String Email { get; set; }
 
 		/// <summary>
-		/// Nome do usuário
+		/// NickName do usuário
 		/// </summary>
 		public String NickName { get; set; }
+
+		/// <summary>
+		/// Nome do usuário
+		/// </summary>
+		public String Nome { get; set; }
 
 		/// <summary>
 		/// Senha do usuário
