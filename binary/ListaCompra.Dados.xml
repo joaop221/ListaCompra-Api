@@ -1,0 +1,381 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ListaCompra.Dados</name>
+    </assembly>
+    <members>
+        <member name="T:ListaCompra.Dados.Agente.AgenteBase">
+            <summary>
+            Modelo de agente base
+            Instancia mecanismos de acesso importantes
+            </summary>
+        </member>
+        <member name="M:ListaCompra.Dados.Agente.AgenteBase.#ctor">
+            <summary>
+            Construtor da classe base
+            </summary>
+        </member>
+        <member name="T:ListaCompra.Dados.Banco.Contexto.OperacaoBanco">
+            <summary>
+            Define o a operação realizada no banco.
+            </summary>
+        </member>
+        <member name="F:ListaCompra.Dados.Banco.Contexto.OperacaoBanco.Inserir">
+            <summary>
+            Operação de inclusão no banco de dados.
+            </summary>
+        </member>
+        <member name="F:ListaCompra.Dados.Banco.Contexto.OperacaoBanco.Atualizar">
+            <summary>
+            Operação de atualização no banco de dados.
+            </summary>
+        </member>
+        <member name="F:ListaCompra.Dados.Banco.Contexto.OperacaoBanco.ExcluirLogico">
+            <summary>
+            Operação de exclusão lógica no banco de dados.
+            </summary>
+        </member>
+        <member name="F:ListaCompra.Dados.Banco.Contexto.OperacaoBanco.ExcluirFisico">
+            <summary>
+            Operação de exclusão física no banco de dados.
+            </summary>
+        </member>
+        <member name="F:ListaCompra.Dados.Banco.Contexto.OperacaoBanco.Obter">
+            <summary>
+            Operação de consulta de um registro no banco de dados.
+            </summary>
+        </member>
+        <member name="F:ListaCompra.Dados.Banco.Contexto.OperacaoBanco.Consultar">
+            <summary>
+            Operação de consulta no banco de dados.
+            </summary>
+        </member>
+        <member name="T:ListaCompra.Dados.Banco.Contexto.BaseDB">
+            <summary>
+            Classe Base do contexto de acesso ao banco
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Dados.Banco.Contexto.BaseDB.DBContextType">
+            <summary>
+            Contexto de conexão EF utilizado pela entidade
+            </summary>
+        </member>
+        <member name="M:ListaCompra.Dados.Banco.Contexto.BaseDB.#ctor">
+            <summary>
+            Construtor vazio
+            </summary>
+        </member>
+        <member name="M:ListaCompra.Dados.Banco.Contexto.BaseDB.#ctor(System.Type)">
+            <summary>
+            Construtor que define contexto
+            </summary>
+            <param name="contextType"></param>
+        </member>
+        <member name="M:ListaCompra.Dados.Banco.Contexto.BaseDB.RetornarContextoDB(System.Boolean)">
+            <summary>Retorna o contexto do banco de dados</summary>
+            <param name="usarTransacaoContexto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ListaCompra.Dados.Banco.Contexto.BaseDB.IniciarTransacaoDB">
+            <summary>Inicia uma transação no banco de dados</summary>
+            <returns></returns>
+        </member>
+        <member name="T:ListaCompra.Dados.Banco.Contexto.ContextoDB">
+            <summary>
+            Contexto de Banco de dados da Aplicação
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Dados.Banco.Contexto.ContextoDB.ExecutandoTransacao">
+            <summary>
+            Indica se uma opração está em execução
+            </summary>
+        </member>
+        <member name="M:ListaCompra.Dados.Banco.Contexto.ContextoDB.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{ListaCompra.Dados.Banco.Contexto.ContextoDB})">
+            <summary>
+            Construtor do contexto do banco
+            </summary>
+            <param name="options">Opções de inicialização</param>
+        </member>
+        <member name="P:ListaCompra.Dados.Banco.Contexto.ContextoDB.Grupos">
+            <summary>
+            Grupos
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Dados.Banco.Contexto.ContextoDB.Listas">
+            <summary>
+            Listas
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Dados.Banco.Contexto.ContextoDB.Produtos">
+            <summary>
+            Produtos
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Dados.Banco.Contexto.ContextoDB.UsuariosProvedor">
+            <summary>
+            Usuarios Provedor
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Dados.Banco.Contexto.ContextoDB.Usuarios">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:ListaCompra.Dados.Banco.Contexto.ContextoTransacional">
+            <summary>
+            Contexto de Transações do banco de dados
+            </summary>
+        </member>
+        <member name="F:ListaCompra.Dados.Banco.Contexto.ContextoTransacional.TransacoesDB">
+            <summary>
+            Coleção de transações em execução no banco de dados
+            </summary>
+        </member>
+        <member name="F:ListaCompra.Dados.Banco.Contexto.ContextoTransacional.disposed">
+            <summary>
+            Define se a instância já foi destruida.
+            </summary>
+        </member>
+        <member name="M:ListaCompra.Dados.Banco.Contexto.ContextoTransacional.#ctor">
+            <summary>Inicia o contexto transacional da aplicação (Só pode ser iniciado através do PortalWeb)</summary>
+        </member>
+        <member name="M:ListaCompra.Dados.Banco.Contexto.ContextoTransacional.ConfirmarMudancas">
+            <summary>
+            Executa a confirmação de mudancas.
+            </summary>
+        </member>
+        <member name="M:ListaCompra.Dados.Banco.Contexto.ContextoTransacional.CancelarMudancas">
+            <summary>
+            Executa o cancelamento de mudancas.
+            </summary>
+        </member>
+        <member name="M:ListaCompra.Dados.Banco.Contexto.ContextoTransacional.AdicionarTransacao(System.Type)">
+            <summary>Inicia uma transação no banco de dados</summary>
+            <returns>Cria uma transação e retorna</returns>
+        </member>
+        <member name="M:ListaCompra.Dados.Banco.Contexto.ContextoTransacional.BuscarContexto(System.Type)">
+            <summary>Busca o objeto de contexto de transação com o banco de dados</summary>
+            <returns></returns>
+        </member>
+        <member name="M:ListaCompra.Dados.Banco.Contexto.ContextoTransacional.ExecutarAcaoContexto(System.Action{ListaCompra.Dados.Banco.Contexto.ContextoDB})">
+            <summary>Executa a ação para todos os objectos do contexto</summary>
+            <param name="acao">Ação</param>
+        </member>
+        <member name="M:ListaCompra.Dados.Banco.Contexto.ContextoTransacional.DestruirObjetoBanco">
+            <summary>
+            Implementa o método de dstruição do objeto de banco de dados do Entity Framework.
+            </summary>
+        </member>
+        <member name="M:ListaCompra.Dados.Banco.Contexto.ContextoTransacional.Finalize">
+            <summary>
+            Realiza a destruição da instância.
+            </summary>
+        </member>
+        <member name="M:ListaCompra.Dados.Banco.Contexto.ContextoTransacional.Dispose">
+            <summary>
+            Realiza a destruição da instância.
+            </summary>
+        </member>
+        <member name="M:ListaCompra.Dados.Banco.Contexto.ContextoTransacional.Dispose(System.Boolean)">
+            <summary>
+            Realiza a destruição da instância.
+            </summary>
+            <param name="disposing">Define se a destruição foi realizada explicitamente.</param>
+        </member>
+        <member name="T:ListaCompra.Dados.Banco.RepositorioBase`1">
+            <summary>
+            Modelo de banco base
+            Instancia conexões com banco e mecanismos de acesso importantes
+            </summary>
+        </member>
+        <member name="M:ListaCompra.Dados.Banco.RepositorioBase`1.#ctor">
+            <summary>
+            Construtor da classe de repositório
+            </summary>
+        </member>
+        <member name="M:ListaCompra.Dados.Banco.RepositorioBase`1.Inserir(`0)">
+            <summary>Inclui o item no banco</summary>
+            <returns>Objeto</returns>
+        </member>
+        <member name="M:ListaCompra.Dados.Banco.RepositorioBase`1.Inserir(System.Collections.Generic.List{`0})">
+            <summary>
+            Efetua a inclusão da lista enviada
+            </summary>
+            <param name="itens">Itens a serem inseridos</param>
+            <returns>Objeto</returns>
+        </member>
+        <member name="M:ListaCompra.Dados.Banco.RepositorioBase`1.Atualizar(`0,System.Boolean)">
+            <summary>
+            Efetua a atualização do objeto informado
+            </summary>
+            <param name="item">Item a ser atualizado</param>
+            <param name="exclusaoLogica">Aponta se é ou não exclusão lógica</param>
+            <returns>Objeto</returns>
+        </member>
+        <member name="M:ListaCompra.Dados.Banco.RepositorioBase`1.Atualizar(System.Collections.Generic.List{`0},System.Boolean)">
+            <summary>
+            Atualiza a lista de objetos informados
+            </summary>
+            <param name="itens">Itens a serem atualizados</param>
+            <param name="exclusaoLogica">Aponta se é ou não exclusão lógica</param>
+            <returns></returns>
+        </member>
+        <member name="M:ListaCompra.Dados.Banco.RepositorioBase`1.Excluir(`0,System.Boolean)">
+            <summary>Exclui o objeto solicitado</summary>
+            <param name="item">Item a ser excluído</param>
+            <param name="exclusaoFisica">Aponta se é ou não exclusão física</param>
+            <returns>Objeto</returns>
+        </member>
+        <member name="M:ListaCompra.Dados.Banco.RepositorioBase`1.Excluir(System.Collections.Generic.List{`0},System.Boolean)">
+            <summary>
+            Exclui a lista de objetos informados
+            </summary>
+            <param name="itens">Itens a serem excluídos</param>
+            <param name="exclusaoFisica">Aponta se é ou não exclusão física</param>
+            <returns>Objeto</returns>
+        </member>
+        <member name="M:ListaCompra.Dados.Banco.RepositorioBase`1.Excluir(System.Collections.Generic.List{System.Int32},System.Boolean)">
+            <summary
+            >Exclui os objetos com as chaves informadas
+            </summary>
+            <param name="chaves">Lista de chaves para exclusão</param>
+            <param name="exclusaoFisica">Tipo de exclusão</param>
+        </member>
+        <member name="M:ListaCompra.Dados.Banco.RepositorioBase`1.Obter(System.Int32)">
+            <summary>
+            Retorna o objeto solicitado
+            </summary>
+            <returns>Objeto</returns>
+        </member>
+        <member name="M:ListaCompra.Dados.Banco.RepositorioBase`1.Obter(System.Object[])">
+            <summary>
+            Retorna o objeto solicitado
+            </summary>
+            <param name="chave">Chave</param>
+            <returns>Objeto</returns>
+        </member>
+        <member name="M:ListaCompra.Dados.Banco.RepositorioBase`1.Obter(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Collections.Generic.List{`0})">
+            <summary>
+            Retorna o objeto solicitado
+            </summary>
+            <param name="filtro">Filtro</param>
+            <param name="carregarEntidades">Entidades que devem ser carregadas na consulta</param>
+            <returns>Objeto</returns>
+        </member>
+        <member name="M:ListaCompra.Dados.Banco.RepositorioBase`1.Consultar">
+            <summary>
+            Retorna a lista de objetos
+            </summary>
+            <returns>Lista de objetos na base</returns>
+        </member>
+        <member name="M:ListaCompra.Dados.Banco.RepositorioBase`1.Consultar(System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Retorna a lista de objetos
+            </summary>
+            <returns>Lista de objetos na base</returns>
+        </member>
+        <member name="M:ListaCompra.Dados.Banco.RepositorioBase`1.Consultar(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Collections.Generic.List{`0},System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Lista Itens a partir de pesquisa
+            </summary>
+            <param name="filtro">Filtro</param>
+            <param name="carregarEntidades">Carrega todas entidades em memória se True</param>
+            <param name="paginaAtual">Página atual</param>
+            <param name="itensPagina">Itens da atual página</param>
+            <param name="ascendente">Crescente ou decrescente</param>
+            <returns>Lista de objetos encontrados</returns>
+        </member>
+        <member name="M:ListaCompra.Dados.Banco.RepositorioBase`1.Consultar``1(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Collections.Generic.List{`0},System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Retorna a lista de objetos aplicando um filtro
+            </summary>
+            <param name="filtro">Expressão a ser usada como filtro</param>
+            <param name="carregarEntidades">Carrega todas entidades em memória se True</param>
+            <param name="ordenacao">Campo ordenação</param>
+            <param name="paginaAtual">Página atual</param>
+            <param name="itensPagina">Itens da atual página</param>
+            <param name="ascendente">Crescente ou decrescente</param>
+            <returns>Lista de objetos encontrados</returns>
+        </member>
+        <member name="M:ListaCompra.Dados.Banco.RepositorioBase`1.ConsultarGenerico(System.Func{System.Linq.IQueryable{`0},System.Linq.IQueryable{`0}},System.Func{System.Linq.IQueryable{`0},System.Linq.IQueryable{`0}},System.Int32,System.Int32)">
+            <summary>
+            Retorna a lista de objetos aplicando um filtro
+            </summary>
+            <param name="funcFiltro">Expressão a ser usada como filtro</param>
+            <param name="funcOrdenacao"></param>
+            <param name="paginaAtual">Página atual</param>
+            <param name="itensPagina">Itens da atual página</param>
+            <returns>Lista de objetos encontrados</returns>
+        </member>
+        <member name="M:ListaCompra.Dados.Banco.RepositorioBase`1.ConsultarQtd(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            Retorna a quantidade de objetos encontrados com o filtro informado
+            </summary>
+            <param name="filtro">Expressão a ser usada como filtro</param>
+            <returns>Quantidade de objetos encontrados</returns>
+        </member>
+        <member name="M:ListaCompra.Dados.Banco.RepositorioBase`1.ConsultarQtdGenerico(System.Func{System.Linq.IQueryable{`0},System.Linq.IQueryable{`0}})">
+            <summary>
+            Retorna quantidade de intens na tabela
+            </summary>
+            <param name="funcFiltro">Filtro da busca</param>
+            <returns>Quantidade de itens</returns>
+        </member>
+        <member name="M:ListaCompra.Dados.Banco.RepositorioBase`1.Executar``1(System.Action{``0})">
+            <summary>
+            Executa a solicitação dentro do contexto com retorno
+            </summary>
+            <param name="acao">Ação a ser executada</param>
+        </member>
+        <member name="M:ListaCompra.Dados.Banco.RepositorioBase`1.Executar``2(System.Func{``0,``1})">
+            <summary>
+            Executa a solicitação dentro do contexto com retorno
+            </summary>
+            <typeparam name="TContext">Contexto da execução</typeparam>
+            <typeparam name="TRetorno">Retorno</typeparam>
+            <param name="acao">Ação a ser executada</param>
+            <returns>Retorno da execução</returns>
+        </member>
+        <member name="T:ListaCompra.Dados.Banco.RepositorioGrupo">
+            <summary>
+            Classe de consulta de Grupos no banco de dados
+            </summary>
+        </member>
+        <member name="T:ListaCompra.Dados.Banco.RepositorioLista">
+            <summary>
+            Classe de consulta de Listas no banco de dados
+            </summary>
+        </member>
+        <member name="T:ListaCompra.Dados.Banco.RepositorioNotificacao">
+            <summary>
+            Classe de consulta de Notificações no banco de dados
+            </summary>
+        </member>
+        <member name="T:ListaCompra.Dados.Banco.RepositorioProduto">
+            <summary>
+            Classe de consulta de Produtos no banco de dados
+            </summary>
+        </member>
+        <member name="T:ListaCompra.Dados.Banco.RepositorioUsarioHelper">
+            <summary>
+            Classe de consulta de Usuarios no banco de dados
+            </summary>
+        </member>
+        <member name="T:ListaCompra.Dados.Banco.RepositorioUsuario">
+            <summary>
+            Classe de consulta de Usuarios no banco de dados
+            </summary>
+        </member>
+        <member name="T:ListaCompra.Dados.DadosBase">
+            <summary>
+            Modelo de dados base
+            Instancia conexões com banco e mecanismos de acesso importantes
+            </summary>
+        </member>
+        <member name="M:ListaCompra.Dados.DadosBase.#ctor">
+            <summary>
+            Construtor da classe de negocio base
+            </summary>
+        </member>
+    </members>
+</doc>

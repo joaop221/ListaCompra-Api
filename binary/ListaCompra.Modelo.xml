@@ -1,0 +1,586 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ListaCompra.Modelo</name>
+    </assembly>
+    <members>
+        <member name="T:ListaCompra.Modelo.Autorizacao.AuthToken">
+            <summary>
+            Token de Autorização
+            </summary>
+        </member>
+        <member name="M:ListaCompra.Modelo.Autorizacao.AuthToken.#ctor">
+            <summary>
+            Contrutor da classe de Autorização
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Autorizacao.AuthToken.Item(System.String)">
+            <summary>
+            Define e consulta valor do token salvo em memória
+            </summary>
+            <param name="valor">Valor do token a ser inserido ou consultado</param>
+            <returns>Passa ou consulta Id do usuário associado ao token</returns>
+        </member>
+        <member name="T:ListaCompra.Modelo.Base">
+            <summary>
+            Modelo base e comum de todas as entidades da aplicação
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Base.UsuarioAtualizacao">
+            <summary>
+            Último usuário a atualizar entidade
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Base.DataAtualizacao">
+            <summary>
+            Data da última alteração da entidade
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Base.UsuarioCriacao">
+            <summary>
+            Criador da entidade
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Base.DataCriacao">
+            <summary>
+            Data da criação da entidade
+            </summary>
+        </member>
+        <member name="T:ListaCompra.Modelo.Enumeradores.Categoria">
+            <summary>
+            Modelo representante de categoria de produto
+            </summary>
+        </member>
+        <member name="F:ListaCompra.Modelo.Enumeradores.Categoria.Personalizada">
+            <summary>
+            Produto personalizado
+            </summary>
+        </member>
+        <member name="T:ListaCompra.Modelo.Enumeradores.TipoNotificacao">
+            <summary>
+            Modelo representante de preferências de notificação
+            </summary>
+        </member>
+        <member name="F:ListaCompra.Modelo.Enumeradores.TipoNotificacao.NaoDefinido">
+            <summary>
+            Nenhuma notificação
+            </summary>
+        </member>
+        <member name="F:ListaCompra.Modelo.Enumeradores.TipoNotificacao.Importantes">
+            <summary>
+            Atualizações do usuário
+            </summary>
+        </member>
+        <member name="F:ListaCompra.Modelo.Enumeradores.TipoNotificacao.Atualizacoes">
+            <summary>
+            Atualizações importantes no grupo e no usuário
+            </summary>
+        </member>
+        <member name="F:ListaCompra.Modelo.Enumeradores.TipoNotificacao.Todas">
+            <summary>
+            Todas as notificações possíveis
+            </summary>
+        </member>
+        <member name="T:ListaCompra.Modelo.Enumeradores.Perfil">
+            <summary>
+            Modelo de gerenciamento de perfis de grupos
+            </summary>
+        </member>
+        <member name="F:ListaCompra.Modelo.Enumeradores.Perfil.Desconhecido">
+            <summary>
+            Perfil desconhecido ou não definido
+            </summary>
+        </member>
+        <member name="F:ListaCompra.Modelo.Enumeradores.Perfil.Proprietario">
+            <summary>
+            Perfil de proprietário e com controles totais sobre o grupo
+            </summary>
+        </member>
+        <member name="F:ListaCompra.Modelo.Enumeradores.Perfil.Administrador">
+            <summary>
+            Perfil de administrador com controles parciais sobre o grupo
+            </summary>
+        </member>
+        <member name="F:ListaCompra.Modelo.Enumeradores.Perfil.Comum">
+            <summary>
+            Perfil comum
+            </summary>
+        </member>
+        <member name="T:ListaCompra.Modelo.Enumeradores.Provedor">
+            <summary>
+            Modelo representante do provedor de identidade
+            </summary>
+        </member>
+        <member name="F:ListaCompra.Modelo.Enumeradores.Provedor.Desconhecido">
+            <summary>
+            Provedor de identidade desconhecido ou não definido
+            </summary>
+        </member>
+        <member name="F:ListaCompra.Modelo.Enumeradores.Provedor.Google">
+            <summary>
+            Google provider - OAuth 2.0
+            </summary>
+        </member>
+        <member name="F:ListaCompra.Modelo.Enumeradores.Provedor.Facebook">
+            <summary>
+            Facebook provider -
+            </summary>
+        </member>
+        <member name="T:ListaCompra.Modelo.Enumeradores.Status">
+            <summary>
+            Modelo de status de produto
+            </summary>
+        </member>
+        <member name="F:ListaCompra.Modelo.Enumeradores.Status.Pendente">
+            <summary>
+            Produto pendente de aprovação
+            </summary>
+        </member>
+        <member name="F:ListaCompra.Modelo.Enumeradores.Status.Confirmado">
+            <summary>
+            Produto confirmado na lista
+            </summary>
+        </member>
+        <member name="F:ListaCompra.Modelo.Enumeradores.Status.Comprado">
+            <summary>
+            Produto comprado
+            </summary>
+        </member>
+        <member name="T:ListaCompra.Modelo.Enumeradores.UnidadeMedida">
+            <summary>
+            Modelo que representa unidades de medida da aplicação
+            </summary>
+        </member>
+        <member name="F:ListaCompra.Modelo.Enumeradores.UnidadeMedida.UN">
+            <summary>
+            Unidade
+            </summary>
+        </member>
+        <member name="T:ListaCompra.Modelo.Grupo">
+            <summary>
+            Representante de Grupo
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Grupo.IdGrupo">
+            <summary>
+            Id do Grupo
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Grupo.Nome">
+            <summary>
+            Nome do Grupo
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Grupo.Descricao">
+            <summary>
+            Descrição do Grupo
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Grupo.Imagem">
+            <summary>
+            Icone de identificação da lista
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Grupo.Listas">
+            <summary>
+            Lista de Listas
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Grupo.Usuarios">
+            <summary>
+            Lista de Usuários
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Grupo.UsuariosPerfis">
+            <summary>
+            Lista de perfis
+            </summary>
+        </member>
+        <member name="T:ListaCompra.Modelo.Lista">
+            <summary>
+            Lista de Produtos
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Lista.IdLista">
+            <summary>
+            Id da Lista
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Lista.Nome">
+            <summary>
+            Nome da Lista
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Lista.Descricao">
+            <summary>
+            Descrição da Lista
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Lista.Imagem">
+            <summary>
+            Icone de identificação do grupo
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Lista.ListaProduto">
+            <summary>
+            Lista de Produtos
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Lista.ValorTotal">
+            <summary>
+            Valor total dos produtos
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Lista.Concluida">
+            <summary>
+            Se lista esta concluída
+            </summary>
+        </member>
+        <member name="T:ListaCompra.Modelo.Notificacoes.Notificacao">
+            <summary>
+            Modelo de notificação da aplicação
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Notificacoes.Notificacao.IdNotificacao">
+            <summary>
+            Id da Notificação
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Notificacoes.Notificacao.Titulo">
+            <summary>
+            Titulo da Notificação
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Notificacoes.Notificacao.Texto">
+            <summary>
+            Texto da Notificação
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Notificacoes.Notificacao.TipoNotificacao">
+            <summary>
+            Tipo de Notificacao
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Notificacoes.Notificacao.ListaUsuarios">
+            <summary>
+            Lista de usuários que receberão a notificação
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Notificacoes.Notificacao.Enviado">
+            <summary>
+            Registra quais usuários estão pendentes de envio da notificação
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Notificacoes.Notificacao.Concluida">
+            <summary>
+            Verifica se status da notificação é concluído
+            </summary>
+        </member>
+        <member name="T:ListaCompra.Modelo.Notificacoes.NotificacaoCache">
+            <summary>
+            Cache de notificação visando garantir velocidade da consulta de notificações
+            </summary>
+        </member>
+        <member name="M:ListaCompra.Modelo.Notificacoes.NotificacaoCache.#ctor(Microsoft.Extensions.Caching.Memory.IMemoryCache)">
+            <summary>
+            Contrutor da classe de cache de notificações
+            </summary>
+            <param name="memoryCache"></param>
+        </member>
+        <member name="M:ListaCompra.Modelo.Notificacoes.NotificacaoCache.ConsultaNotificacao(System.Int32)">
+            <summary>
+            Retorna Notificação apartir de usuário
+            </summary>
+            <param name="idUsuario">id do usuário</param>
+            <returns>Notificação</returns>
+        </member>
+        <member name="M:ListaCompra.Modelo.Notificacoes.NotificacaoCache.InsereNotificacao(ListaCompra.Modelo.Notificacoes.Notificacao)">
+            <summary>
+            Insere notificação no cache
+            </summary>
+            <param name="notificacao">notificação a ser inserida</param>
+        </member>
+        <member name="M:ListaCompra.Modelo.Notificacoes.NotificacaoCache.RemoveNotificacao(System.Int32)">
+            <summary>
+            Remove notificação do cache
+            </summary>
+            <param name="idUsuario">id do usuário</param>
+        </member>
+        <member name="T:ListaCompra.Modelo.Produto">
+            <summary>
+            Modelo de armazenamento de produto
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Produto.UnidadeMedida">
+            <summary>
+            Unidade de medida do produto
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Produto.Status">
+            <summary>
+            Status do produto
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Produto.Quantidade">
+            <summary>
+            Quantidade de produtos
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Produto.ValorUnitario">
+            <summary>
+            Valor unitário estimado
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Produto.ValorTotal">
+            <summary>
+            Valor total dos produtos
+            </summary>
+        </member>
+        <member name="T:ListaCompra.Modelo.ProdutoBase">
+            <summary>
+            Modelo de produto base que ficara salvo
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.ProdutoBase.IdProduto">
+            <summary>
+            Id do Produto
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.ProdutoBase.Nome">
+            <summary>
+            Nome do produto
+            </summary>
+        </member>
+        <member name="T:ListaCompra.Modelo.Response.BaseResponse">
+            <summary>
+            Modelo padrão de response da aplicação
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Response.BaseResponse.Messagem">
+            <summary>
+            Mensagem de retorno da consulta
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Response.BaseResponse.CodigoRetorno">
+            <summary>
+            Código de retorno para rastrabilidade da execução
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Response.BaseResponse.Elementos">
+            <summary>
+            Elementos a serem enviados para o front
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Response.BaseResponse.Excecao">
+            <summary>
+            Caso ocorra excecao retorna serializada
+            </summary>
+        </member>
+        <member name="T:ListaCompra.Modelo.Response.Elementos.Helper">
+            <summary>
+            Modelo de auxílio do preenchimento de elementos na tela
+            </summary>
+        </member>
+        <member name="M:ListaCompra.Modelo.Response.Elementos.Helper.#ctor(System.Type,System.Boolean)">
+            <summary>
+            Construtor da classe de Auxílio de elementos
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Response.Elementos.Helper.NomeElemento">
+            <summary>
+            Nome do elemento
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Response.Elementos.Helper.Elementos">
+            <summary>
+            Coleção de elementos serializados do enumerador
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Response.Elementos.Helper.Descricao">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:ListaCompra.Modelo.Response.ItemResponse`1">
+            <summary>
+            Response padrão de itens
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Response.ItemResponse`1.Item">
+            <summary>
+            Item de retorno do objeto
+            </summary>
+        </member>
+        <member name="T:ListaCompra.Modelo.Response.ListResponse`1">
+            <summary>
+            Response padrão de listas
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Response.ListResponse`1.Item">
+            <summary>
+            Item de retorno do objeto
+            </summary>
+        </member>
+        <member name="T:ListaCompra.Modelo.Tratamento.DadosExcecao">
+            <summary>
+            Modelo de exceção de dados
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Tratamento.DadosExcecao.Codigo">
+            <summary>
+            Código status da exceção
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Tratamento.DadosExcecao.Mensagem">
+            <summary>
+            Mensagem amigável
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Tratamento.DadosExcecao.Validacao">
+            <summary>
+            Objeto que armazena todas as validações de negócio
+            </summary>
+        </member>
+        <member name="M:ListaCompra.Modelo.Tratamento.DadosExcecao.#ctor(System.String)">
+            <summary>
+            Construtor básico de exceção de negócio
+            </summary>
+        </member>
+        <member name="M:ListaCompra.Modelo.Tratamento.DadosExcecao.#ctor(System.Int32,System.String)">
+            <summary>
+            Construtor de exceção de negócio
+            </summary>
+        </member>
+        <member name="M:ListaCompra.Modelo.Tratamento.DadosExcecao.#ctor(System.Int32,System.String,System.Exception)">
+            <summary>
+            Construtor completo de exceção de negócio
+            </summary>
+        </member>
+        <member name="T:ListaCompra.Modelo.Tratamento.NegocioExcecao">
+            <summary>
+            Modelo de exceção de negócio
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Tratamento.NegocioExcecao.Codigo">
+            <summary>
+            Código status da exceção
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Tratamento.NegocioExcecao.Mensagem">
+            <summary>
+            Mensagem amigável
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Tratamento.NegocioExcecao.Validacao">
+            <summary>
+            Objeto que armazena todas as validações de negócio
+            </summary>
+        </member>
+        <member name="M:ListaCompra.Modelo.Tratamento.NegocioExcecao.#ctor(System.String)">
+            <summary>
+            Construtor básico de exceção de negócio
+            </summary>
+        </member>
+        <member name="M:ListaCompra.Modelo.Tratamento.NegocioExcecao.#ctor(System.Int32,System.String)">
+            <summary>
+            Construtor de exceção de negócio
+            </summary>
+        </member>
+        <member name="M:ListaCompra.Modelo.Tratamento.NegocioExcecao.#ctor(System.Int32,System.String,System.Exception)">
+            <summary>
+            Construtor completo de exceção de negócio
+            </summary>
+        </member>
+        <member name="T:ListaCompra.Modelo.Usuario">
+            <summary>
+            Modelo de usuário da aplicação
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Usuario.IdUsuario">
+            <summary>
+            Id do banco do usuário
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Usuario.NickName">
+            <summary>
+            NickName do usuário
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Usuario.Nome">
+            <summary>
+            Nome do usuário
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Usuario.Imagem">
+            <summary>
+            Imagem de perfil do usuário
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.Usuario.PreferenciaNotificacao">
+            <summary>
+            Preferencia de recebimento de notificacoes
+            </summary>
+        </member>
+        <member name="T:ListaCompra.Modelo.UsuarioHelper">
+            <summary>
+            Modelo de usuário provedor de identidade
+            </summary>
+        </member>
+        <member name="F:ListaCompra.Modelo.UsuarioHelper.hash">
+            <summary>
+            Armazenha hash da string
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.UsuarioHelper.Provedor">
+            <summary>
+            Define qual o provedor de identidade do usuário
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.UsuarioHelper.Email">
+            <summary>
+            Email do usuário
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.UsuarioHelper.HashProvedor">
+            <summary>
+            Hash do usuário retornada do provedor de identidade
+            </summary>
+        </member>
+        <member name="P:ListaCompra.Modelo.UsuarioHelper.HashSenha">
+            <summary>
+            Senha do usuário
+            Não estara preenchida sempre
+            </summary>
+        </member>
+        <member name="T:ListaCompra.Modelo.Validator.GrupoValidator">
+            <summary>
+            Modelo de validação da classe de Grupos
+            </summary>
+        </member>
+        <member name="T:ListaCompra.Modelo.Validator.ListaValidator">
+            <summary>
+            Modelo de validação da classe de Grupos
+            </summary>
+        </member>
+        <member name="T:ListaCompra.Modelo.Validator.ProdutoValidator">
+            <summary>
+            Modelo de validação da classe de Grupos
+            </summary>
+        </member>
+        <member name="T:ListaCompra.Modelo.Validator.UsuarioProvedorValidator">
+            <summary>
+            Modelo de validação da classe de Grupos
+            </summary>
+        </member>
+        <member name="T:ListaCompra.Modelo.Validator.UsuarioValidator">
+            <summary>
+            Modelo de validação da classe de Grupos
+            </summary>
+        </member>
+        <member name="M:ListaCompra.Modelo.Validator.UsuarioValidator.#ctor">
+            <summary>
+            Construtor da classe e dos validadores
+            </summary>
+        </member>
+    </members>
+</doc>

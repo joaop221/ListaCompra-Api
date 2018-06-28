@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ListaCompra.Negocio</name>
+    </assembly>
+    <members>
+        <member name="T:ListaCompra.Negocio.NegocioBase">
+            <summary>
+            Classe comum a todas as entidades de negócio
+            </summary>
+        </member>
+        <member name="F:ListaCompra.Negocio.NegocioBase.dadosBase">
+            <summary>
+            Armazena entidades de dados
+            </summary>
+        </member>
+        <member name="F:ListaCompra.Negocio.NegocioBase.agenteBase">
+            <summary>
+            Armazena entidades de agentes
+            </summary>
+        </member>
+        <member name="M:ListaCompra.Negocio.NegocioBase.#ctor(System.String)">
+            <summary>
+            Construtor de negócio base
+            </summary>
+        </member>
+        <member name="T:ListaCompra.Negocio.NegocioGrupo">
+            <summary>
+            Métodos de negócio de grupos
+            </summary>
+        </member>
+        <member name="M:ListaCompra.Negocio.NegocioGrupo.#ctor">
+            <summary>
+            Contrutor da classe de negócio de grupo
+            </summary>
+        </member>
+        <member name="M:ListaCompra.Negocio.NegocioGrupo.Criar(ListaCompra.Modelo.Grupo)">
+            <summary>
+            Método de validação e criação de novo grupo
+            </summary>
+            <param name="grupo">Grupo a ser criado</param>
+            <returns>Id do grupo</returns>
+        </member>
+        <member name="T:ListaCompra.Negocio.NegocioLista">
+            <summary>
+            Métodos de negócio de lista de produtos
+            </summary>
+        </member>
+        <member name="M:ListaCompra.Negocio.NegocioLista.#ctor">
+            <summary>
+            Contrutor da classe de negócio de lista de produtos
+            </summary>
+        </member>
+        <member name="M:ListaCompra.Negocio.NegocioLista.Consultar(System.Int32)">
+            <summary>
+            Consulta lista no Id específicado
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ListaCompra.Negocio.NegocioNotificacao">
+            <summary>
+            Métodos de negócio de notificações
+            </summary>
+        </member>
+        <member name="M:ListaCompra.Negocio.NegocioNotificacao.#ctor">
+            <summary>
+            Contrutor da classe de negócio de lista de produtos
+            </summary>
+        </member>
+        <member name="M:ListaCompra.Negocio.NegocioNotificacao.Consultar(System.Int32)">
+            <summary>
+            Consulta Notificações no Id específicado
+            </summary>
+            <param name="id">Id do Usuario</param>
+            <returns>Lista de notificações</returns>
+        </member>
+        <member name="T:ListaCompra.Negocio.NegocioProduto">
+            <summary>
+            Métodos de negócio de produtos
+            </summary>
+        </member>
+        <member name="M:ListaCompra.Negocio.NegocioProduto.#ctor">
+            <summary>
+            Contrutor da classe de negócio de produto
+            </summary>
+        </member>
+        <member name="T:ListaCompra.Negocio.NegocioUsuario">
+            <summary>
+            Métodos de negócio de usuários
+            </summary>
+        </member>
+        <member name="M:ListaCompra.Negocio.NegocioUsuario.#ctor">
+            <summary>
+            Contrutor da classe de negócio de usuário
+            </summary>
+        </member>
+        <member name="M:ListaCompra.Negocio.NegocioUsuario.Criar(ListaCompra.Modelo.Usuario)">
+            <summary>
+            Método de validação e criação de usuário
+            </summary>
+            <param name="usuario">Usuário a ser criado</param>
+            <returns>Grupo padrão do usuário</returns>
+        </member>
+        <member name="M:ListaCompra.Negocio.NegocioUsuario.Login(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="usuario"></param>
+            <param name="senha"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
