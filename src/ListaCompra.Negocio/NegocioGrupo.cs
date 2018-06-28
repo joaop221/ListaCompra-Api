@@ -57,7 +57,7 @@ namespace ListaCompra.Negocio
                 return retorno;
 			}
 
-			throw new NegocioExcacao(500, "Falha na criação do usuário");
+			throw new NegocioExcecao(500, "Falha na criação do usuário");
 		}
 	}
 }

@@ -55,7 +55,7 @@ namespace ListaCompra.Negocio
                 };
             }
 
-            throw new NegocioExcacao(400, "Não foi possível encontrar a lista indicada");
+            throw new NegocioExcecao(400, "Não foi possível encontrar a lista indicada");
         }
     }
 }

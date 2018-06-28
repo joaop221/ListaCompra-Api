@@ -51,7 +51,7 @@ namespace ListaCompra.Negocio
                 return grupoPadrao;
             }
 
-			throw new NegocioExcacao(500, "Falha na criação do usuário");
+			throw new NegocioExcecao(500, "Falha na criação do usuário");
 		}
 
 		/// <summary>
@@ -94,7 +94,7 @@ namespace ListaCompra.Negocio
 			}
 			else
 			{
-				throw new NegocioExcacao(400, "Usuário ou senha incorretos");
+				throw new NegocioExcecao(400, "Usuário ou senha incorretos");
 			}
 
 			return retorno;

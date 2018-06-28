@@ -5,7 +5,7 @@ namespace ListaCompra.Modelo.Tratamento
 	/// <summary>
 	/// Modelo de exceção de negócio
 	/// </summary>
-	public class NegocioExcacao : Exception
+	public class NegocioExcecao : Exception
 	{
 		/// <summary>
 		/// Código status da exceção
@@ -25,7 +25,7 @@ namespace ListaCompra.Modelo.Tratamento
 		/// <summary>
 		/// Construtor básico de exceção de negócio
 		/// </summary>
-		public NegocioExcacao(string mensagemAmigavel) : base(mensagemAmigavel)
+		public NegocioExcecao(string mensagemAmigavel) : base(mensagemAmigavel)
 		{
 			this.Mensagem = mensagemAmigavel;
 		}
@@ -33,7 +33,7 @@ namespace ListaCompra.Modelo.Tratamento
 		/// <summary>
 		/// Construtor de exceção de negócio
 		/// </summary>
-		public NegocioExcacao(int codigo, string mensagemAmigavel) : base(mensagemAmigavel)
+		public NegocioExcecao(int codigo, string mensagemAmigavel) : base(mensagemAmigavel)
 		{
 			this.Codigo = codigo;
 			this.Mensagem = mensagemAmigavel;
@@ -42,7 +42,7 @@ namespace ListaCompra.Modelo.Tratamento
 		/// <summary>
 		/// Construtor completo de exceção de negócio
 		/// </summary>
-		public NegocioExcacao(int codigo, string mensagemAmigavel, Exception innerException)
+		public NegocioExcecao(int codigo, string mensagemAmigavel, Exception innerException)
 			: base(mensagemAmigavel, innerException)
 		{
 			this.Codigo = codigo;
