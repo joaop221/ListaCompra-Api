@@ -19,7 +19,7 @@ Banco de Dados SQL-Server (Windows ou Linux) - https://www.microsoft.com/en-us/s
 
 Executar Scripts de banco de dados na pasta: src/ListaCompra.SQL/*.sql
 
-Execute os comandos
+Execute os comandos no diretório src/ListaCompra.Servicos
 
 ```
 dotnet run
