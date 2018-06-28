@@ -40,7 +40,7 @@ namespace ListaCompra.Servicos.Controllers
 				{
 					action.Invoke(retorno);
 				}
-				catch (NegocioExcacao ex)
+				catch (NegocioExcecao ex)
 				{
 					retorno.CodigoRetorno = ex.Codigo;
 					retorno.Messagem = ex.Mensagem;
