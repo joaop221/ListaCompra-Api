@@ -19,3 +19,6 @@ Disponível para todas as plataformas.
 ### Contribuições
 
 joaop221 - João Pedro Garcia
+uekita - Denis Taka Uekita
+belyukie - Isabel Noguti
+taks - Guilherme Takara
