@@ -14,12 +14,12 @@ Disponível para todas as plataformas.
 
 ### Instalação e Dependências
 
-.NET Core >= 2.0 (cross-platform) - https://www.microsoft.com/net/learn/get-started/windows
-Banco de Dados SQL-Server (Windows ou Linux) - https://www.microsoft.com/en-us/sql-server/sql-server-2016
+* .NET Core >= 2.0 (cross-platform) - https://www.microsoft.com/net/learn/get-started/windows
+* Banco de Dados SQL-Server (Windows ou Linux) - https://www.microsoft.com/en-us/sql-server/sql-server-2016
 
-Executar Scripts de banco de dados na pasta: src/ListaCompra.SQL/*.sql
+Executar Scripts de banco de dados na pasta: ListaCompra-Api/src/ListaCompra.SQL/*.sql
 
-Execute os comandos no diretório src/ListaCompra.Servicos
+Execute os comandos no diretório ListaCompra-Api/src/ListaCompra.Servicos
 
 ```
 dotnet run
