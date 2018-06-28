@@ -1,20 +1,31 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
+﻿using FluentValidation.AspNetCore;
+using ListaCompra.Servicos.Config;
+using ListaCompra.Servicos.Filters;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Swashbuckle.AspNetCore.Swagger;
 
 namespace ListaCompra.Servicos
 {
 	/// <summary>
 	/// Classe de inicialização da aplicação
 	/// </summary>
-    public class Startup
-    {
+	public class Startup
+	{
+		/// <summary>
+		/// Configurações iniciais da aplicação
+		/// </summary>
+		public IConfiguration Configuration { get; }
+
+		/// <summary>
+		/// Define connection string da aplicação
+		/// </summary>
+		public static string ConnectionString { get; private set; }
+
 		/// <summary>
 		/// Construtor da classe Startup
 		/// </summary>
@@ -25,38 +36,34 @@ namespace ListaCompra.Servicos
 		}
 
 		/// <summary>
-		/// Configurações iniciais da aplicação
-		/// </summary>
-		public IConfiguration Configuration { get; }
-
-		/// <summary>
 		/// Método chamada pela aplicação em tempo de execução para configurar todos os serviços
 		/// </summary>
 		/// <param name="services">Serviços</param>
 		public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddMvc();
+		{
+			// Configurando serviço MVC e Fluent VAlidation para validadores
+			services.AddMvc(options =>
+			{
+				options.Filters.Add(typeof(FilterValidation));
+			}).AddFluentValidation();
+
+			// Configurando contexto do banco para EF
+			services.AddDbContext<DbContext>(options =>
+			{
+				options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+			});
 
 			// Configurando o serviço de documentação do Swagger
-			services.AddSwaggerGen(c =>
-			{
-				c.SwaggerDoc("v1", new Info
-				{
-					Title = "Lista de Compra - API",
-					Version = "v1",
-					Description = "API REST criada com o ASP.NET Core de Lista de Compra",
-					Contact = new Contact
-					{
-						Name = "João Pedro",
-						Url = "https://github.com/joaop221"
-					}
-				});
+			services.AddSwagger();
 
-				// Define o caminho dos arquivos de documentação do Swagger
-				string xmlFile = $"{Assembly.GetEntryAssembly().GetName().Name}.xml";
-				string xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-				c.IncludeXmlComments(xmlPath);
-			});
+            // Adiciona controlador de headers na aplicação
+            services.AddCors();
+
+			// Configurando serviço de autenticação
+			services.AddAuth(Configuration.GetSection("App").GetValue<string>("SigningKey"));
+
+			// Configurando serviço de cache
+			services.AddSingletons();
 		}
 
 		/// <summary>
@@ -64,26 +71,33 @@ namespace ListaCompra.Servicos
 		/// </summary>
 		/// <param name="app">Contexto da aplicação</param>
 		/// <param name="env">Ambiente</param>
-		/// <param name="loggerFactory">Log</param>
+		/// <param name="loggerFactory">Console de Log</param>
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+		{
+			// Contexto de desenvolvimento da aplicação
+			if (env.IsDevelopment())
+			{
+				app.UseDeveloperExceptionPage();
+			}
 
+			// Ativa Console de Log da aplicação
 			loggerFactory.AddConsole(Configuration.GetSection("Logging"));
 			loggerFactory.AddDebug();
 
-			app.UseMvc();
-
-			// Ativando middlewares para uso do Swagger
-			app.UseSwagger();
-			app.UseSwaggerUI(c =>
+			// Inicia serviço que permite urls consultarem API
+			app.UseCors(options =>
 			{
-				c.SwaggerEndpoint("/swagger/ui/index",
-					"Lista de Compra - API"); 
+				options.WithOrigins("http://localhost:4200").AllowAnyHeader();
 			});
+
+            // Inicia serviço MVC
+            app.UseMvc();
+
+			// Inicia serviço de Auteenticação
+			app.UseAuthentication();
+
+			// Inicia serviço Swagger
+			app.UseSwaggerConfig();
 		}
-    }
+	}
 }

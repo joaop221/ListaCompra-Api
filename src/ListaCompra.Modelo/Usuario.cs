@@ -1,5 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using FluentValidation.Attributes;
+using ListaCompra.Modelo.Enumeradores;
+using ListaCompra.Modelo.Validator;
+using System;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace ListaCompra.Modelo
@@ -7,32 +10,32 @@ namespace ListaCompra.Modelo
 	/// <summary>
 	/// Modelo de usuário da aplicação
 	/// </summary>
-    public class Usuario : Base
-    {
+	[Validator(typeof(UsuarioValidator))]
+	public class Usuario : Base
+	{
 		/// <summary>
 		/// Id do banco do usuário
 		/// </summary>
 		public int IdUsuario { get; set; }
 
 		/// <summary>
-		/// Email do usuário
-		/// </summary>
-		public String Email { get; set; }
-
-		/// <summary>
 		/// NickName do usuário
 		/// </summary>
-		public String NickName { get; set; }
+		public string NickName { get; set; }
 
 		/// <summary>
 		/// Nome do usuário
 		/// </summary>
-		public String Nome { get; set; }
+		public string Nome { get; set; }
 
-		/// <summary>
-		/// Senha do usuário
-		/// Não estara preenchida sempre
-		/// </summary>
-		public String Password { get; set; } //TODO: Criar métodos de get e set garantindo criptografia da senha
-	}
+        /// <summary>
+        /// Imagem de perfil do usuário
+        /// </summary>
+        public string Imagem { get; set; }
+
+        /// <summary>
+        /// Preferencia de recebimento de notificacoes
+        /// </summary>
+        public TipoNotificacao PreferenciaNotificacao { get; set; }
+    }
 }
