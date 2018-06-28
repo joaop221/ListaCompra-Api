@@ -3,8 +3,8 @@
 ### Descrição
 
 Lista de Compras - Serviços e métodos para auxiliar aplicações nos repositórios:
-* ListaCompra-UI
-* ListaCompra-Web
+* ListaCompra-Android
+* ListaCompra-Web (futuro)
 
 ### Plataforma
 
