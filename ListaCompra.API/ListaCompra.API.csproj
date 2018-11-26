@@ -21,6 +21,7 @@
     <PackageReference Include="Serilog.Sinks.Async" Version="1.3.0" />
     <PackageReference Include="Serilog.Sinks.Debug" Version="1.0.1" />
     <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
+    <PackageReference Include="SerilogWeb.Classic" Version="4.2.42" />
   </ItemGroup>
 
   <ItemGroup>
