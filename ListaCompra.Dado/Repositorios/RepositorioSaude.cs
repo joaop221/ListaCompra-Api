@@ -8,6 +8,7 @@ namespace ListaCompra.Dado.Repositorios
     public class RepositorioSaude : IRepositorioSaude
     {
         private readonly ListaCompraBDContexto contexto;
+
         public RepositorioSaude(ListaCompraBDContexto contexto)
         {
             this.contexto = contexto;

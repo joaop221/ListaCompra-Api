@@ -26,7 +26,11 @@ namespace ListaCompra.Infraestrutura.Validacao
                 {
                     foreach (var reg in registros)
                         fv.RegisterValidatorsFromAssemblyContaining(reg.Tipo);
+                    fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
+                    fv.LocalizationEnabled = true;
                 });
+
+            ValidatorOptions.LanguageManager = new TraducaoPtBr();
 
             return mvcBuilder;
         }

@@ -1,16 +1,23 @@
 using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using FluentValidation;
 using ListaCompra.Dado.EF.Contextos;
 using ListaCompra.Infraestrutura.Filtros;
+using ListaCompra.Infraestrutura.Seguranca;
 using ListaCompra.Infraestrutura.Swagger;
 using ListaCompra.Infraestrutura.Validacao;
 using ListaCompra.Negocio;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Serilog;
@@ -42,15 +49,9 @@ namespace ListaCompra.API
             services
                 .ConfiguraSwaggerGen();
 
-            //Ação de configuração para ser reutilizada
-            Action<DbContextOptionsBuilder> dbOptionsAction =
-                (options) =>
-                {
-                    options.UseSqlServer(this.Configuration.GetConnectionString("Default"));
-                };
+            ConfiguraBanco(services);
 
-            //Configura o contexto principal
-            services.AddDbContext<ListaCompraBDContexto>(dbOptionsAction);
+            ConfiguraSeguranca(services);
 
             // Injeta todos os repositorios
             ConfiguracaoDI.RepositorioDI(services);
@@ -59,7 +60,7 @@ namespace ListaCompra.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, SegurancaBDContext contexto)
         {
             //Adicionar o Serilog
             loggerFactory.AddSerilog();
@@ -73,8 +74,9 @@ namespace ListaCompra.API
                 app.UseHsts();
             }
 
+            app.UseAuthentication();
+
             app
-                .UseHttpsRedirection()
                 .UseMvc()
                 .ConfiguraSwaggerUI();
         }
@@ -95,6 +97,55 @@ namespace ListaCompra.API
 
             //não identa o Json (ocupa menos espaço)
             opcoes.SerializerSettings.Formatting = Formatting.None;
+        }
+
+        //local function de configuração para ser reutilizada
+        private void DbOptionsActionDefault(DbContextOptionsBuilder options)
+            => options.UseSqlServer(this.Configuration.GetConnectionString("Default"));
+
+        private void ConfiguraBanco(IServiceCollection services)
+        {
+            //Configura o contexto principal
+            services.AddDbContext<ListaCompraBDContexto>(DbOptionsActionDefault);
+        }
+
+        private void ConfiguraSeguranca(IServiceCollection services)
+        {
+            services.AddDbContext<SegurancaBDContext>(DbOptionsActionDefault);
+
+            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 5;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+            })
+            .AddEntityFrameworkStores<SegurancaBDContext>()
+            .AddDefaultTokenProviders()
+            .AddErrorDescriber<DescricaoCustomizadaIdentityError>();
+
+            // ===== Add Jwt Authentication ========
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); // => remove default claims
+            services
+                .AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(cfg =>
+                {
+                    cfg.RequireHttpsMetadata = false;
+                    cfg.SaveToken = true;
+                    cfg.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidIssuer = this.Configuration["JwtIssuer"],
+                        ValidAudience = this.Configuration["JwtIssuer"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.Configuration["ChaveJwt"])),
+                        ClockSkew = TimeSpan.Zero // remove delay of token when expire
+                    };
+                });
         }
     }
 }

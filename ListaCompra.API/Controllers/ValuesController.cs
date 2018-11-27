@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ListaCompra.API.Controllers
@@ -8,10 +9,12 @@ namespace ListaCompra.API.Controllers
     public class ValuesController : ControllerBase
     {
         // GET api/values
+        [Authorize()]
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get() => new string[] { "value1", "value2" };
 
         // GET api/values/5
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public ActionResult<string> Get(int id) => "value";
 
