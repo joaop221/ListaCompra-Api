@@ -1,7 +1,6 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
-using FluentValidation;
 using ListaCompra.Dado.EF.Contextos;
 using ListaCompra.Infraestrutura.Filtros;
 using ListaCompra.Infraestrutura.Seguranca;
@@ -45,12 +44,20 @@ namespace ListaCompra.API
                 .AddJsonOptions(opcoes => AddJsonOptions(opcoes))
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+            // desabilita resposta de bad request automaticas
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
+
             // Configura swagger ui
             services
                 .ConfiguraSwaggerGen();
 
+            // Configura conexao com o banco de dados
             ConfiguraBanco(services);
 
+            // Configura autenticacao e autorizacao com jwt
             ConfiguraSeguranca(services);
 
             // Injeta todos os repositorios
@@ -74,9 +81,8 @@ namespace ListaCompra.API
                 app.UseHsts();
             }
 
-            app.UseAuthentication();
-
             app
+                .UseAuthentication()
                 .UseMvc()
                 .ConfiguraSwaggerUI();
         }

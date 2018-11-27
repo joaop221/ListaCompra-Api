@@ -19,10 +19,8 @@ namespace ListaCompra.Modelo.API.Account
         public RegistroRequestValidacao()
         {
             RuleFor(x => x.Email)
-                .NotEmpty();
-
-            RuleFor(x => x.Funcoes)
-                .NotEmpty();
+                .NotEmpty()
+                .EmailAddress();
 
             RuleFor(x => x.Nome)
                 .NotEmpty();

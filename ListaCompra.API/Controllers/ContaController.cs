@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using ListaCompra.Infraestrutura.Filtros;
 using ListaCompra.Modelo.API.Account;
 using ListaCompra.Negocio;
 using Microsoft.AspNetCore.Identity;
@@ -9,6 +10,7 @@ namespace ListaCompra.API.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [ValidacaoFiltro]
     public class ContaController : ControllerBase
     {
         private readonly NegocioConta negocioConta;
