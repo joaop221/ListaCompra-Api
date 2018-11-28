@@ -1,6 +1,7 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using AutoMapper;
 using ListaCompra.Dado.EF.Contextos;
 using ListaCompra.Dado.EF.Core;
 using ListaCompra.Infraestrutura.Filtros;
@@ -44,6 +45,8 @@ namespace ListaCompra.API
                 .ConfigureFluentValidation()
                 .AddJsonOptions(opcoes => AddJsonOptions(opcoes))
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddAutoMapper();
 
             // desabilita resposta de bad request automaticas
             services.Configure<ApiBehaviorOptions>(options =>

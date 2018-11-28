@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Transactions;
 using ListaCompra.Infraestrutura.Tratamento;
 using ListaCompra.Modelo;
-using ListaCompra.Modelo.API.Account;
+using ListaCompra.Modelo.API.Conta;
 using ListaCompra.Modelo.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -113,7 +113,7 @@ namespace ListaCompra.Negocio
         private async Task AdicionaFuncoes(List<string> funcoes, IdentityUser user)
         {
             if (funcoes == null)
-                funcoes = new List<string>(); 
+                funcoes = new List<string>();
             if (!funcoes.Contains("Comum"))
                 funcoes.Add("Comum");
 

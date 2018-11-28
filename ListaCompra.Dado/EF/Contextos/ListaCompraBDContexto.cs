@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ListaCompra.Dado.EF.Core;
@@ -105,7 +106,7 @@ namespace ListaCompra.Dado.EF.Contextos
                 entity.Property(e => e.Id).HasColumnName("Id");
                 entity.Property(e => e.RoleId).HasColumnName("IdFuncao");
                 entity.Property(e => e.ClaimType).HasColumnName("TipoClaim");
-                entity.Property(e => e.ClaimValue).HasColumnName("ValorClaim");               
+                entity.Property(e => e.ClaimValue).HasColumnName("ValorClaim");
             });
 
             #endregion [ Renomeacao entidades do Identity ]
@@ -135,12 +136,21 @@ namespace ListaCompra.Dado.EF.Contextos
 
             #endregion [ N para N ]
 
+            #region [ Preenche dados ]
+
+            builder.Entity<Permissao>()
+                .HasData(new Permissao() { Id = 1, Nome = "Dono", DataInclusao = DateTime.UtcNow, LoginInclusao = "MIGRATION" },
+                         new Permissao() { Id = 2, Nome = "Administrador", DataInclusao = DateTime.UtcNow, LoginInclusao = "MIGRATION" },
+                         new Permissao() { Id = 3, Nome = "Contribuidor", DataInclusao = DateTime.UtcNow, LoginInclusao = "MIGRATION" });
+
+            #endregion [ Preenche dados ]
+
             #region [ Delete on cascade off ]
 
             IEnumerable<IMutableForeignKey> cascadeFKs = builder.Model.GetEntityTypes()
                 .Where(x => !x.Name.Contains("Identity"))
                 .SelectMany(t => t.GetForeignKeys())
-                .Where(fk =>  !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade);
+                .Where(fk => !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade);
 
             foreach (IMutableForeignKey fk in cascadeFKs)
                 fk.DeleteBehavior = DeleteBehavior.Restrict;

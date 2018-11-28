@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20181128210352_PermissaoGrupo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Agentes\" />
   </ItemGroup>
 

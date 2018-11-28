@@ -4,14 +4,16 @@ using ListaCompra.Dado.EF.Contextos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ListaCompra.Dado.Migrations
 {
     [DbContext(typeof(ListaCompraBDContexto))]
-    partial class ListaCompraBDContextoModelSnapshot : ModelSnapshot
+    [Migration("20181128211059_PermissaoGrupo")]
+    partial class PermissaoGrupo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
