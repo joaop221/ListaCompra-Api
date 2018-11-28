@@ -5,9 +5,12 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using ListaCompra.Infraestrutura.Tratamento;
+using ListaCompra.Modelo;
 using ListaCompra.Modelo.API.Account;
 using ListaCompra.Modelo.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -20,29 +23,32 @@ namespace ListaCompra.Negocio
         private readonly UserManager<IdentityUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly IConfiguration configuration;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
         public NegocioConta(UserManager<IdentityUser> userManager,
                                     SignInManager<IdentityUser> signInManager,
                                     IConfiguration configuration,
-                                    RoleManager<IdentityRole> roleManager)
+                                    RoleManager<IdentityRole> roleManager,
+                                    IHttpContextAccessor httpContextAccessor)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.configuration = configuration;
             this.roleManager = roleManager;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<LoginResponse> Login(LoginRequest model)
         {
-            Microsoft.AspNetCore.Identity.SignInResult result =
-                await this.signInManager.PasswordSignInAsync(model.Email, model.Senha, false, false);
+            SignInResult result =
+                await this.signInManager.PasswordSignInAsync(model.NomeUsuario, model.Senha, false, false);
 
             if (result.Succeeded)
             {
-                IdentityUser appUser = this.userManager.Users.SingleOrDefault(r => r.Email == model.Email);
+                IdentityUser appUser = this.userManager.Users.SingleOrDefault(r => r.UserName == model.NomeUsuario);
                 IList<string> teste = await this.userManager.GetRolesAsync(appUser);
 
-                var token = await GeraTokenJwt(model.Email, appUser);
+                var token = await GeraTokenJwt(model.NomeUsuario, appUser);
 
                 return new LoginResponse(token);
             }
@@ -52,24 +58,56 @@ namespace ListaCompra.Negocio
 
         public async Task<RegistroResponse> Registro(RegistroRequest model)
         {
-            var user = new IdentityUser
+            // Criado para apenas commitar as mudanças caso todos os passos do login funcione
+            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                UserName = model.Nome,
-                Email = model.Email
-            };
-            IdentityResult userResult = await this.userManager.CreateAsync(user, model.Senha);
+                var user = new IdentityUser
+                {
+                    UserName = model.Nome,
+                    Email = model.Email
+                };
 
+                IdentityResult userResult = await this.userManager.CreateAsync(user, model.Senha);
+
+                if (!userResult.Succeeded)
+                    throw new RegistroExcecao(userResult.Errors);
+
+                // Adiciona as funcoes do usuario
+                await AdicionaFuncoes(model.Funcoes, user);
+
+                await this.signInManager.SignInAsync(user, false);
+
+                var token = await GeraTokenJwt(model.Email, user);
+
+                scope.Complete();
+
+                return new RegistroResponse(token);
+            }
+        }
+
+        public async Task<RetornoErro> ExcluirConta(LoginRequest model)
+        {
+            var sbErros = new StringBuilder();
+
+            // Criado para apenas commitar as mudanças caso todos os passos do login funcione
+            IdentityUser user = await this.userManager.FindByNameAsync(model.NomeUsuario);
+            if (user == null)
+                throw new ApiExcecao(422, "Este usuario não existe!");
+
+            SignInResult result =
+                await this.signInManager.CheckPasswordSignInAsync(user, model.Senha, false);
+
+            if (!result.Succeeded)
+                throw new FalhaLoginExcecao("Login inválido");
+
+            IdentityResult userResult = await this.userManager.DeleteAsync(user);
             if (!userResult.Succeeded)
-                throw new RegistroExcecao(userResult.Errors);
+            {
+                userResult.Errors.ToList().ForEach(x => sbErros.AppendLine(x.Description));
+                throw new NegocioExcecao(sbErros.ToString());
+            }
 
-            // Adiciona as funcoes do usuario
-            await AdicionaFuncoes(model.Funcoes, user);
-
-            await this.signInManager.SignInAsync(user, false);
-
-            var token = await GeraTokenJwt(model.Email, user);
-
-            return new RegistroResponse(token);
+            return new RetornoErro("Usuario excluido com sucesso!", 200, ToString());
         }
 
         private async Task AdicionaFuncoes(List<string> funcoes, IdentityUser user)

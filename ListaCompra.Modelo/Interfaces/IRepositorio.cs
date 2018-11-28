@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using ListaCompra.Modelo.Entidades;
 
 namespace ListaCompra.Modelo.Interfaces
@@ -16,7 +17,7 @@ namespace ListaCompra.Modelo.Interfaces
         /// Inclui o item no banco
         /// </summary>
         /// <returns>Objeto</returns>
-        void Inserir(TEntidade item, int? setTimeoutTo = null, int reattempts = 0);
+        Task InserirAsync(TEntidade item, int? setTimeoutTo = null, int reattempts = 0);
 
         /// <summary>
         /// Efetua a inclusão da lista enviada
@@ -25,7 +26,7 @@ namespace ListaCompra.Modelo.Interfaces
         /// <param name="setTimeoutTo"></param>
         /// <param name="reattempts">  </param>
         /// <returns>Objeto</returns>
-        void Inserir(List<TEntidade> itens, int? setTimeoutTo = null, int reattempts = 0);
+        Task InserirAsync(List<TEntidade> itens, int? setTimeoutTo = null, int reattempts = 0);
 
         #endregion [ Métodos de Inclusão ]
 
@@ -38,7 +39,7 @@ namespace ListaCompra.Modelo.Interfaces
         /// <param name="exclusaoLogica"></param>
         /// <param name="reattempts">    </param>
         /// <returns>Objeto</returns>
-        void Atualizar(TEntidade item, bool exclusaoLogica = false, int reattempts = 0);
+        Task AtualizarAsync(TEntidade item, bool exclusaoLogica = false, int reattempts = 0);
 
         /// <summary>
         /// Atualiza a lista de objetos informados
@@ -48,7 +49,7 @@ namespace ListaCompra.Modelo.Interfaces
         /// <param name="exclusaoLogica"></param>
         /// <param name="reattempts">    </param>
         /// <returns></returns>
-        void Atualizar(List<TEntidade> itens, bool exclusaoLogica = false, int reattempts = 0);
+        Task AtualizarAsync(List<TEntidade> itens, bool exclusaoLogica = false, int reattempts = 0);
 
         #endregion [ Atualizar ]
 
@@ -61,7 +62,7 @@ namespace ListaCompra.Modelo.Interfaces
         /// <param name="exclusaoFisica"></param>
         /// <param name="reattempts">    </param>
         /// <returns>Objeto</returns>
-        void Excluir(TEntidade item, bool exclusaoFisica = false, int reattempts = 0);
+        Task ExcluirAsync(TEntidade item, bool exclusaoFisica = false, int reattempts = 0);
 
         /// <summary>
         /// Exclui a lista de objetos informados
@@ -69,7 +70,7 @@ namespace ListaCompra.Modelo.Interfaces
         /// <param name="itens">         Lista de entidades</param>
         /// <param name="exclusaoFisica"></param>
         /// <returns>Objeto</returns>
-        void Excluir(List<TEntidade> itens, bool exclusaoFisica = false);
+        Task ExcluirAsync(List<TEntidade> itens, bool exclusaoFisica = false);
 
         /// <summary>
         /// Exclui os objetos com as chaves informadas
@@ -77,7 +78,7 @@ namespace ListaCompra.Modelo.Interfaces
         /// <typeparam name="T">Tipo de entidade de banco</typeparam>
         /// <param name="chaves">        Lista de chaves para exclusão</param>
         /// <param name="exclusaoFisica">Tipo de exclusão</param>
-        void Excluir(List<int> chaves, bool exclusaoFisica = false);
+        Task ExcluirAsync(List<int> chaves, bool exclusaoFisica = false);
 
         /// <summary>
         /// Retorna a lista de objetos aplicando um filtro
@@ -85,7 +86,7 @@ namespace ListaCompra.Modelo.Interfaces
         /// <param name="filtro">        Expressão a ser usada como filtro</param>
         /// <param name="exclusaoFisica"></param>
         /// <returns>Lista de objetos encontrados</returns>
-        void Excluir(Expression<Func<TEntidade, bool>> filtro, bool exclusaoFisica = false);
+        Task ExcluirAsync(Expression<Func<TEntidade, bool>> filtro, bool exclusaoFisica = false);
 
         #endregion [ Métodos para Excluir o item ]
 
@@ -96,14 +97,14 @@ namespace ListaCompra.Modelo.Interfaces
         /// </summary>
         /// <param name="chave"></param>
         /// <returns>Objeto</returns>
-        TEntidade Obter(int chave);
+        Task<TEntidade> ObterAsync(int chave);
 
         /// <summary>
         /// Retorna o objeto solicitado
         /// </summary>
         /// <param name="chave"></param>
         /// <returns>Objeto</returns>
-        TEntidade Obter(object[] chave);
+        Task<TEntidade> ObterAsync(object[] chave);
 
         #endregion [ Métodos Obter ]
 
@@ -116,13 +117,13 @@ namespace ListaCompra.Modelo.Interfaces
         /// <param name="ordenacao"> </param>
         /// <param name="ascendente"></param>
         /// <returns>Lista de objetos encontrados</returns>
-        List<TEntidade> ConsultarOrdenado<TKey>(Expression<Func<TEntidade, bool>> filtro, Expression<Func<TEntidade, TKey>> ordenacao, bool ascendente = true);
+        Task<List<TEntidade>> ConsultarOrdenadoAsync<TKey>(Expression<Func<TEntidade, bool>> filtro, Expression<Func<TEntidade, TKey>> ordenacao, bool ascendente = true);
 
         /// <summary>
         /// Retorna a lista de objetos
         /// </summary>
         /// <returns>Lista de objetos na base</returns>
-        List<TEntidade> Consultar(List<int> chaves);
+        Task<List<TEntidade>> ConsultarAsync(List<int> chaves);
 
         /// <summary>
         /// Retorna a lista de objetos
@@ -132,14 +133,14 @@ namespace ListaCompra.Modelo.Interfaces
         /// <param name="itensPagina"></param>
         /// <param name="ascendente"> </param>
         /// <returns></returns>
-        List<TEntidade> Consultar(Expression<Func<TEntidade, bool>> filtro, int paginaAtual = -1, int itensPagina = -1, bool ascendente = true);
+        Task<List<TEntidade>> ConsultarAsync(Expression<Func<TEntidade, bool>> filtro, int paginaAtual = -1, int itensPagina = -1, bool ascendente = true);
 
         /// <summary>
         /// Retorna a quantidade de objetos encontrados com o filtro informado
         /// </summary>
         /// <param name="filtro">Expressão a ser usada como filtro</param>
         /// <returns>Quantidade de objetos encontrados</returns>
-        int ConsultarQtd(Expression<Func<TEntidade, bool>> filtro);
+        Task<int> ConsultarQtdAsync(Expression<Func<TEntidade, bool>> filtro);
 
         #endregion [ Métodos Listar ]
     }

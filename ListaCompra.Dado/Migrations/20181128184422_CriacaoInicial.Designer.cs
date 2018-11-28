@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ListaCompra.Dado.Migrations
 {
     [DbContext(typeof(ListaCompraBDContexto))]
-    [Migration("20181128172004_CriacaoInicial")]
+    [Migration("20181128184422_CriacaoInicial")]
     partial class CriacaoInicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -251,6 +251,12 @@ namespace ListaCompra.Dado.Migrations
                         .HasFilter("[NomeNormalizado] IS NOT NULL");
 
                     b.ToTable("Funcao");
+
+                    b.HasData(
+                        new { Id = "933ea249-7afb-4fd3-842e-0265b26e8dde", ConcurrencyStamp = "41270b2b-4e6b-4a0c-9ec1-14d2712abe87", Name = "Admin", NormalizedName = "ADMIN" },
+                        new { Id = "dfe406bf-6977-463e-a3bb-34be16cd68d4", ConcurrencyStamp = "c9eae67c-06cc-4e63-b075-28a994c3ae82", Name = "Comum", NormalizedName = "COMUM" },
+                        new { Id = "303be0ff-15c8-484b-a9de-6970ce05f583", ConcurrencyStamp = "9dbb7b53-98cb-47d0-8255-211de3e0ad25", Name = "Moderador", NormalizedName = "MODERADOR" }
+                    );
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -470,7 +476,7 @@ namespace ListaCompra.Dado.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -478,7 +484,7 @@ namespace ListaCompra.Dado.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -486,7 +492,7 @@ namespace ListaCompra.Dado.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -494,12 +500,12 @@ namespace ListaCompra.Dado.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -507,7 +513,7 @@ namespace ListaCompra.Dado.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

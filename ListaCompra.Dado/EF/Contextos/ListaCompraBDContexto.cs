@@ -55,9 +55,9 @@ namespace ListaCompra.Dado.EF.Contextos
                 entity.Property(e => e.NormalizedName).HasColumnName("NomeNormalizado");
                 entity.Property(e => e.ConcurrencyStamp).HasColumnName("AlteracaoStamp");
 
-                entity.HasData(new IdentityRole("Admin"),
-                                new IdentityRole("Comum"),
-                                new IdentityRole("Moderador"));
+                entity.HasData(new IdentityRole("Admin") { NormalizedName = "ADMIN" },
+                                new IdentityRole("Comum") { NormalizedName = "COMUM" },
+                                new IdentityRole("Moderador") { NormalizedName = "MODERADOR" });
             });
 
             builder.Entity<IdentityUserRole<string>>(entity =>
@@ -105,7 +105,7 @@ namespace ListaCompra.Dado.EF.Contextos
                 entity.Property(e => e.Id).HasColumnName("Id");
                 entity.Property(e => e.RoleId).HasColumnName("IdFuncao");
                 entity.Property(e => e.ClaimType).HasColumnName("TipoClaim");
-                entity.Property(e => e.ClaimValue).HasColumnName("ValorClaim");
+                entity.Property(e => e.ClaimValue).HasColumnName("ValorClaim");               
             });
 
             #endregion [ Renomeacao entidades do Identity ]
@@ -138,8 +138,9 @@ namespace ListaCompra.Dado.EF.Contextos
             #region [ Delete on cascade off ]
 
             IEnumerable<IMutableForeignKey> cascadeFKs = builder.Model.GetEntityTypes()
+                .Where(x => !x.Name.Contains("Identity"))
                 .SelectMany(t => t.GetForeignKeys())
-                .Where(fk => !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade);
+                .Where(fk =>  !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade);
 
             foreach (IMutableForeignKey fk in cascadeFKs)
                 fk.DeleteBehavior = DeleteBehavior.Restrict;

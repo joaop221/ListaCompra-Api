@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Threading;
-using ListaCompra.Dado.EF.Core;
 using ListaCompra.Infraestrutura.Reflexao;
 using ListaCompra.Modelo.Entidades;
 
@@ -16,14 +14,10 @@ namespace ListaCompra.Dado.EF.Core
         /// <typeparam name="T">Type</typeparam>
         /// <param name="item">    Objeto</param>
         /// <param name="operacao">Operação realizada</param>
-        public static void DefinirValorPadrao(Entidade item, OperacaoBanco operacao, bool validarItensFilhos = true)
+        public static void DefinirValorPadrao(Entidade item, OperacaoBanco operacao, string usuarioAtual, bool validarItensFilhos = true)
         {
             if (item == null)
                 return;
-
-            var usuarioAtual = Thread.CurrentPrincipal.Identity != null && !string.IsNullOrWhiteSpace(Thread.CurrentPrincipal.Identity.Name) ?
-                                 Thread.CurrentPrincipal.Identity.Name :
-                                  string.Concat(Environment.UserDomainName, @"\", Environment.UserName);
 
             switch (operacao)
             {
@@ -54,7 +48,7 @@ namespace ListaCompra.Dado.EF.Core
             PropertyInfo[] propriedades = item.GetType().GetProperties();
             foreach (PropertyInfo propriedade in propriedades)
                 if (propriedade.PropertyType.IsSubclassOf(typeof(Entidade)) && propriedade.GetValue(item, null) != null)
-                    DefinirValorPadrao((Entidade)propriedade.GetValue(item, null), operacao, false);
+                    DefinirValorPadrao((Entidade)propriedade.GetValue(item, null), operacao, usuarioAtual, false);
                 else if (
                     propriedade.PropertyType.IsGenericType &&
                     propriedade.PropertyType.GenericTypeArguments.Length > 0 &&
@@ -64,7 +58,7 @@ namespace ListaCompra.Dado.EF.Core
                     var valores = (IEnumerable<Entidade>)propriedade.GetValue(item, null);
                     if (valores != null)
                         foreach (Entidade valor in valores)
-                            DefinirValorPadrao(valor, operacao, false);
+                            DefinirValorPadrao(valor, operacao, usuarioAtual, false);
                 }
         }
     }

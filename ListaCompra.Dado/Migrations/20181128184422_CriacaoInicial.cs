@@ -130,7 +130,7 @@ namespace ListaCompra.Dado.Migrations
                         column: x => x.IdFuncao,
                         principalTable: "Funcao",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -203,7 +203,7 @@ namespace ListaCompra.Dado.Migrations
                         column: x => x.IdUsuario,
                         principalTable: "Usuario",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -221,13 +221,13 @@ namespace ListaCompra.Dado.Migrations
                         column: x => x.IdFuncao,
                         principalTable: "Funcao",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_UsuarioFuncao_Usuario_IdUsuario",
                         column: x => x.IdUsuario,
                         principalTable: "Usuario",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -247,7 +247,7 @@ namespace ListaCompra.Dado.Migrations
                         column: x => x.IdUsuario,
                         principalTable: "Usuario",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -267,7 +267,7 @@ namespace ListaCompra.Dado.Migrations
                         column: x => x.IdUsuario,
                         principalTable: "Usuario",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -301,6 +301,21 @@ namespace ListaCompra.Dado.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.InsertData(
+                table: "Funcao",
+                columns: new[] { "Id", "AlteracaoStamp", "Nome", "NomeNormalizado" },
+                values: new object[] { "933ea249-7afb-4fd3-842e-0265b26e8dde", "41270b2b-4e6b-4a0c-9ec1-14d2712abe87", "Admin", "ADMIN" });
+
+            migrationBuilder.InsertData(
+                table: "Funcao",
+                columns: new[] { "Id", "AlteracaoStamp", "Nome", "NomeNormalizado" },
+                values: new object[] { "dfe406bf-6977-463e-a3bb-34be16cd68d4", "c9eae67c-06cc-4e63-b075-28a994c3ae82", "Comum", "COMUM" });
+
+            migrationBuilder.InsertData(
+                table: "Funcao",
+                columns: new[] { "Id", "AlteracaoStamp", "Nome", "NomeNormalizado" },
+                values: new object[] { "303be0ff-15c8-484b-a9de-6970ce05f583", "9dbb7b53-98cb-47d0-8255-211de3e0ad25", "Moderador", "MODERADOR" });
 
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",

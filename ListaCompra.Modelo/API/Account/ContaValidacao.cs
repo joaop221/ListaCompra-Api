@@ -6,7 +6,7 @@ namespace ListaCompra.Modelo.API.Account
     {
         public LoginRequestValidacao()
         {
-            RuleFor(x => x.Email)
+            RuleFor(x => x.NomeUsuario)
                 .NotEmpty();
 
             RuleFor(x => x.Senha)

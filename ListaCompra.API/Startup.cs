@@ -2,6 +2,7 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using ListaCompra.Dado.EF.Contextos;
+using ListaCompra.Dado.EF.Core;
 using ListaCompra.Infraestrutura.Filtros;
 using ListaCompra.Infraestrutura.Seguranca;
 using ListaCompra.Infraestrutura.Swagger;
@@ -111,8 +112,11 @@ namespace ListaCompra.API
 
         private void ConfiguraBanco(IServiceCollection services)
         {
-            //Configura o contexto principal
+            // Configura o contexto principal
             services.AddDbContext<ListaCompraBDContexto>(DbOptionsActionDefault);
+
+            // Injeta o contexto padrão
+            services.AddScoped(typeof(BDContextoBase), typeof(ListaCompraBDContexto));
         }
 
         private void ConfiguraSeguranca(IServiceCollection services)

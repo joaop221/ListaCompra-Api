@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Threading;
-using ListaCompra.Dado.EF.Contextos;
+using System.Threading.Tasks;
 using ListaCompra.Dado.EF.Core;
 using ListaCompra.Modelo.Entidades;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Z.EntityFramework.Plus;
 
 namespace ListaCompra.Dado.Repositorios
@@ -17,10 +19,17 @@ namespace ListaCompra.Dado.Repositorios
 
     {
         protected readonly BDContextoBase Db;
+        private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly UserManager<IdentityUser> userManager;
+        private readonly IServiceProvider services;
 
-        public Repositorio(BDContextoBase contexto)
+        public Repositorio(BDContextoBase contexto, IServiceProvider services)
         {
             this.Db = contexto;
+            this.services = services;
+
+            this.httpContextAccessor = this.services.GetRequiredService<IHttpContextAccessor>();
+            this.userManager = this.services.GetRequiredService<UserManager<IdentityUser>>();
         }
 
         #region [ Métodos de Inclusão ]
@@ -29,14 +38,16 @@ namespace ListaCompra.Dado.Repositorios
         /// Inclui o item no banco
         /// </summary>
         /// <returns>Objeto</returns>
-        public void Inserir(TEntidade item, int? setTimeoutTo = null, int reattempts = 0)
+        public async Task InserirAsync(TEntidade item, int? setTimeoutTo = null, int reattempts = 0)
         {
+            var usuarioAtual = await ObterUsuarioAtualAsync();
+
             //Verifica se existe algum item
             if (item == null)
                 return;
 
             //Define os valores padrões do item
-            DefinirValorPadrao(item, OperacaoBanco.Inserir);
+            DefinirValorPadrao(item, OperacaoBanco.Inserir, usuarioAtual);
 
             this.Db.Set<TEntidade>().Add(item);
             this.Db.Entry(item).State = EntityState.Added;
@@ -53,7 +64,7 @@ namespace ListaCompra.Dado.Repositorios
                 if (reattempts > 3)
                     throw;
 
-                Inserir(item, setTimeoutTo, ++reattempts);
+                await InserirAsync(item, setTimeoutTo, ++reattempts);
             }
         }
 
@@ -62,8 +73,10 @@ namespace ListaCompra.Dado.Repositorios
         /// </summary>
         /// <param name="type">lista de itens</param>
         /// <returns>Objeto</returns>
-        public void Inserir(List<TEntidade> itens, int? setTimeoutTo = null, int reattempts = 0)
+        public async Task InserirAsync(List<TEntidade> itens, int? setTimeoutTo = null, int reattempts = 0)
         {
+            var usuarioAtual = await ObterUsuarioAtualAsync();
+
             //Verifica se possui item na lista
             if (itens == null || itens.Count == 0)
                 return;
@@ -74,7 +87,7 @@ namespace ListaCompra.Dado.Repositorios
             DbSet<TEntidade> tabela = this.Db.Set<TEntidade>();
 
             //Preenche os campos padrões
-            itens.ForEach(i => DefinirValorPadrao(i, OperacaoBanco.Inserir));
+            itens.ForEach(i => DefinirValorPadrao(i, OperacaoBanco.Inserir, usuarioAtual));
 
             //Inclui o range
             tabela.AddRange(itens);
@@ -88,7 +101,7 @@ namespace ListaCompra.Dado.Repositorios
                 if (reattempts > 3)
                     throw;
 
-                Inserir(itens, setTimeoutTo, ++reattempts);
+                await InserirAsync(itens, setTimeoutTo, ++reattempts);
             }
         }
 
@@ -101,12 +114,14 @@ namespace ListaCompra.Dado.Repositorios
         /// </summary>
         /// <param name="cod_anexo">ID do item</param>
         /// <returns>Objeto</returns>
-        public void Atualizar(TEntidade item, bool exclusaoLogica = false, int reattempts = 0)
+        public async Task AtualizarAsync(TEntidade item, bool exclusaoLogica = false, int reattempts = 0)
         {
+            var usuarioAtual = await ObterUsuarioAtualAsync();
+
             try
             {
                 //Define os valores padrões do item
-                DefinirValorPadrao(item, OperacaoBanco.Atualizar);
+                DefinirValorPadrao(item, OperacaoBanco.Atualizar, usuarioAtual);
 
                 //Define o estado como modificado
                 this.Db.Entry(item).State = EntityState.Modified;
@@ -120,7 +135,7 @@ namespace ListaCompra.Dado.Repositorios
                     if (reattempts > 3)
                         throw;
 
-                    Atualizar(item, exclusaoLogica, ++reattempts);
+                    await AtualizarAsync(item, exclusaoLogica, ++reattempts);
                 }
             }
             catch (Exception)
@@ -135,8 +150,10 @@ namespace ListaCompra.Dado.Repositorios
         /// <typeparam name="T">Tipo de objeto para ser atualizado</typeparam>
         /// <param name="itens">Lista de entidades</param>
         /// <returns></returns>
-        public void Atualizar(List<TEntidade> itens, bool exclusaoLogica = false, int reattempts = 0)
+        public async Task AtualizarAsync(List<TEntidade> itens, bool exclusaoLogica = false, int reattempts = 0)
         {
+            var usuarioAtual = await ObterUsuarioAtualAsync();
+
             //Verifica se possui item na lista
             if (itens == null || itens.Count == 0)
                 return;
@@ -150,7 +167,7 @@ namespace ListaCompra.Dado.Repositorios
                     this.Db.Entry(item).State = EntityState.Modified;
 
                     //Define os valores padrões do item
-                    DefinirValorPadrao(item, exclusaoLogica ? OperacaoBanco.ExcluirLogico : OperacaoBanco.Atualizar);
+                    DefinirValorPadrao(item, exclusaoLogica ? OperacaoBanco.ExcluirLogico : OperacaoBanco.Atualizar, usuarioAtual);
                 });
 
             try
@@ -162,7 +179,7 @@ namespace ListaCompra.Dado.Repositorios
                 if (reattempts > 3)
                     throw;
 
-                Atualizar(itens, exclusaoLogica, ++reattempts);
+                await AtualizarAsync(itens, exclusaoLogica, ++reattempts);
             }
         }
 
@@ -175,8 +192,10 @@ namespace ListaCompra.Dado.Repositorios
         /// </summary>
         /// <param name="cod_anexo">ID do item</param>
         /// <returns>Objeto</returns>
-        public void Excluir(TEntidade item, bool exclusaoFisica = false, int reattempts = 0)
+        public async Task ExcluirAsync(TEntidade item, bool exclusaoFisica = false, int reattempts = 0)
         {
+            var usuarioAtual = await ObterUsuarioAtualAsync();
+
             try
             {
                 //Verifica se deve excluir físicamente o registro
@@ -194,16 +213,16 @@ namespace ListaCompra.Dado.Repositorios
                         if (reattempts > 3)
                             throw;
 
-                        Excluir(item, exclusaoFisica, ++reattempts);
+                        await ExcluirAsync(item, exclusaoFisica, ++reattempts);
                     }
                 }
                 else
                 {
                     //Define os valores padrões do item
-                    DefinirValorPadrao(item, OperacaoBanco.ExcluirLogico);
+                    DefinirValorPadrao(item, OperacaoBanco.ExcluirLogico, usuarioAtual);
 
                     //Exclusão lógica do item
-                    Atualizar(item, true);
+                    await AtualizarAsync(item, true);
                 }
             }
             catch (Exception)
@@ -217,16 +236,16 @@ namespace ListaCompra.Dado.Repositorios
         /// </summary>
         /// <param name="itens">Lista de entidades</param>
         /// <returns>Objeto</returns>
-        public void Excluir(List<TEntidade> itens, bool exclusaoFisica = false)
+        public async Task ExcluirAsync(List<TEntidade> itens, bool exclusaoFisica = false)
         {
             //Verifica se possui item na lista
             if (itens == null || itens.Count == 0)
                 return;
 
             if (exclusaoFisica)
-                itens.ForEach(i => Excluir(i, true));
+                itens.ForEach(async i => await ExcluirAsync(i, true));
             else
-                Atualizar(itens, true);
+                await AtualizarAsync(itens, true);
         }
 
         /// <summary>
@@ -236,7 +255,7 @@ namespace ListaCompra.Dado.Repositorios
         /// <param name="entidade">      Entidade</param>
         /// <param name="chaves">        Lista de chaves para exclusão</param>
         /// <param name="exclusaoFisica">Tipo de exclusão</param>
-        public void Excluir(List<int> chaves, bool exclusaoFisica = false)
+        public async Task ExcluirAsync(List<int> chaves, bool exclusaoFisica = false)
         {
             if (chaves.Count == 0)
                 return;
@@ -258,7 +277,7 @@ namespace ListaCompra.Dado.Repositorios
 
             //Exclui todos os itens
             if (itens.Count > 0)
-                Excluir(itens, exclusaoFisica);
+                await ExcluirAsync(itens, exclusaoFisica);
         }
 
         /// <summary>
@@ -266,9 +285,9 @@ namespace ListaCompra.Dado.Repositorios
         /// </summary>
         /// <param name="filtro">Expressão a ser usada como filtro</param>
         /// <returns>Lista de objetos encontrados</returns>
-        public void Excluir(Expression<Func<TEntidade, bool>> filtro, bool exclusaoFisica = false)
+        public async Task ExcluirAsync(Expression<Func<TEntidade, bool>> filtro, bool exclusaoFisica = false)
         {
-            var usuarioAtual = ObterUsuarioAtual();
+            var usuarioAtual = await ObterUsuarioAtualAsync();
 
             //Busca o objeto solicitado
 
@@ -294,7 +313,7 @@ namespace ListaCompra.Dado.Repositorios
         /// </summary>
         /// <param name="cod_anexo">ID do item</param>
         /// <returns>Objeto</returns>
-        public TEntidade Obter(int chave)
+        public async Task<TEntidade> ObterAsync(int chave)
         {
             var retorno = default(TEntidade);
 
@@ -315,7 +334,7 @@ namespace ListaCompra.Dado.Repositorios
         /// </summary>
         /// <param name="cod_anexo">ID do item</param>
         /// <returns>Objeto</returns>
-        public TEntidade Obter(object[] chave)
+        public async Task<TEntidade> ObterAsync(object[] chave)
         {
             var retorno = default(TEntidade);
 
@@ -339,7 +358,7 @@ namespace ListaCompra.Dado.Repositorios
         /// </summary>
         /// <param name="filtro">Expressão a ser usada como filtro</param>
         /// <returns>Lista de objetos encontrados</returns>
-        public List<TEntidade> ConsultarOrdenado<TKey>(Expression<Func<TEntidade, bool>> filtro, Expression<Func<TEntidade, TKey>> ordenacao, bool ascendente = true)
+        public async Task<List<TEntidade>> ConsultarOrdenadoAsync<TKey>(Expression<Func<TEntidade, bool>> filtro, Expression<Func<TEntidade, TKey>> ordenacao, bool ascendente = true)
         {
             //Busca o objeto solicitado
 
@@ -367,15 +386,15 @@ namespace ListaCompra.Dado.Repositorios
         /// Retorna a lista de objetos
         /// </summary>
         /// <returns>Lista de objetos na base</returns>
-        public List<TEntidade> Consultar(List<int> chaves)
+        public async Task<List<TEntidade>> ConsultarAsync(List<int> chaves)
         {
             var retorno = new List<TEntidade>();
 
             //Busca o objeto solicitado
 
-            chaves.ForEach(i =>
+            chaves.ForEach(async i =>
             {
-                TEntidade entidade = Obter(i);
+                TEntidade entidade = await ObterAsync(i);
                 if (entidade != null)
                     retorno.Add(entidade);
             });
@@ -384,7 +403,7 @@ namespace ListaCompra.Dado.Repositorios
             return retorno;
         }
 
-        public List<TEntidade> Consultar(Expression<Func<TEntidade, bool>> filtro, int paginaAtual = -1, int itensPagina = -1, bool ascendente = true)
+        public async Task<List<TEntidade>> ConsultarAsync(Expression<Func<TEntidade, bool>> filtro, int paginaAtual = -1, int itensPagina = -1, bool ascendente = true)
         {
             //Busca o objeto solicitado
 
@@ -410,7 +429,7 @@ namespace ListaCompra.Dado.Repositorios
         /// </summary>
         /// <param name="filtro">Expressão a ser usada como filtro</param>
         /// <returns>Quantidade de objetos encontrados</returns>
-        public int ConsultarQtd(Expression<Func<TEntidade, bool>> filtro)
+        public async Task<int> ConsultarQtdAsync(Expression<Func<TEntidade, bool>> filtro)
         {
             var retorno = 0;
 
@@ -436,12 +455,10 @@ namespace ListaCompra.Dado.Repositorios
         /// Retorna o usuário atual que está realizando a operação
         /// </summary>
         /// <returns></returns>
-        protected string ObterUsuarioAtual()
+        protected async Task<string> ObterUsuarioAtualAsync()
         {
-            var usuarioAtual = Thread.CurrentPrincipal.Identity != null && !string.IsNullOrWhiteSpace(Thread.CurrentPrincipal.Identity.Name) ?
-                                 Thread.CurrentPrincipal.Identity.Name :
-                                  string.Concat(Environment.UserDomainName, @"\", Environment.UserName);
-            return usuarioAtual;
+            IdentityUser logado = await this.userManager.GetUserAsync(this.httpContextAccessor.HttpContext.User);
+            return logado != null ? logado.UserName : string.Concat(Environment.UserDomainName, @"\", Environment.UserName);
         }
 
         #endregion [ Métodos Auxiliares ]

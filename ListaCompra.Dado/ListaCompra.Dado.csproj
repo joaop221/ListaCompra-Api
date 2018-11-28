@@ -8,10 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20181128172527_CiracaoFuncoes.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Agentes\" />
   </ItemGroup>
 
