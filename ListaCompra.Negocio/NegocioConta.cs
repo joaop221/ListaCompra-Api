@@ -112,6 +112,8 @@ namespace ListaCompra.Negocio
 
         private async Task AdicionaFuncoes(List<string> funcoes, IdentityUser user)
         {
+            if (funcoes == null)
+                funcoes = new List<string>(); 
             if (!funcoes.Contains("Comum"))
                 funcoes.Add("Comum");
 
