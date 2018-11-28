@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace ListaCompra.Dado.EF.Core
 {
-    public class BDContextoBase : DbContext
+    public class BDContextoBase : IdentityDbContext<IdentityUser>
     {
         public bool ExecutandoTransacao { get; set; }
 

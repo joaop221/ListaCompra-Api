@@ -67,7 +67,7 @@ namespace ListaCompra.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, SegurancaBDContext contexto)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             //Adicionar o Serilog
             loggerFactory.AddSerilog();
@@ -117,8 +117,6 @@ namespace ListaCompra.API
 
         private void ConfiguraSeguranca(IServiceCollection services)
         {
-            services.AddDbContext<SegurancaBDContext>(DbOptionsActionDefault);
-
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
                 options.Password.RequireDigit = false;
@@ -127,7 +125,7 @@ namespace ListaCompra.API
                 options.Password.RequireUppercase = false;
                 options.Password.RequireLowercase = false;
             })
-            .AddEntityFrameworkStores<SegurancaBDContext>()
+            .AddEntityFrameworkStores<ListaCompraBDContexto>()
             .AddDefaultTokenProviders()
             .AddErrorDescriber<DescricaoCustomizadaIdentityError>();
 
