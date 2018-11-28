@@ -66,6 +66,24 @@ namespace ListaCompra.Infraestrutura.Filtros
                 List<RetornoErro> erros = CriaListaErro(500, GetExceptionFont(excecaoDados), excecaoDados.Detalhes);
                 return CriaResponse(erros);
             }
+            else if (ex is FalhaLoginExcecao falhaLogin) // Em caso de erros na camada de dados
+            {
+                this._logger.LogWarning(falhaLogin, falhaLogin.Message);
+
+                List<RetornoErro> erros = CriaListaErro(401, GetExceptionFont(falhaLogin), falhaLogin.Message);
+                return CriaResponse(erros, HttpStatusCode.Unauthorized);
+            }
+            else if (ex is RegistroExcecao registroExcecao) // Em caso de erros na camada de dados
+            {
+                this._logger.LogWarning(registroExcecao, registroExcecao.Message);
+
+                return new ContentResult()
+                {
+                    ContentType = "application/json",
+                    StatusCode = 422,
+                    Content = JsonConvert.SerializeObject(registroExcecao.Erros)
+                };
+            }
             else // Em caso de erros genericos
             {
                 var excecaoSistema = ex as Exception;

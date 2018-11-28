@@ -15,18 +15,13 @@ namespace ListaCompra.Infraestrutura.Validacao
             //Busca o assembly de modelo
             System.Reflection.Assembly modeloAssembly = typeof(RetornoErro).Assembly;
 
-            //Busca todos os modelos no assembly que tem AbstractValidator
-            var registros =
-                from tipo in modeloAssembly.GetExportedTypes()
-                where tipo.GetBaseTypes().Any(x => x.Name == typeof(AbstractValidator<>).Name)
-                select new { Tipo = tipo };
-
             mvcBuilder
                 .AddFluentValidation(fv =>
                 {
-                    foreach (var reg in registros)
-                        fv.RegisterValidatorsFromAssemblyContaining(reg.Tipo);
+                    fv.RegisterValidatorsFromAssembly(modeloAssembly);
                 });
+
+            ValidatorOptions.LanguageManager = new TraducaoPtBr();
 
             return mvcBuilder;
         }
