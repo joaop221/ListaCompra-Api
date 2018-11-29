@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using ListaCompra.Infraestrutura.Reflexao;
 using ListaCompra.Modelo.Entidades;
+using ListaCompra.Modelo.Interfaces;
 
 namespace ListaCompra.Dado.EF.Core
 {

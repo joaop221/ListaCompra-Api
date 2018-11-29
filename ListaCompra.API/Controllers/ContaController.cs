@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using ListaCompra.Infraestrutura.Filtros;
 using ListaCompra.Modelo;
-using ListaCompra.Modelo.API.Account;
+using ListaCompra.Modelo.API.Conta;
 using ListaCompra.Negocio;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

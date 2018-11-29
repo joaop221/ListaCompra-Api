@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
-using ListaCompra.Modelo.Entidades;
 using Microsoft.AspNetCore.Identity;
 
 namespace ListaCompra.Modelo.Entidades
@@ -42,5 +38,16 @@ namespace ListaCompra.Modelo.Entidades
         /// </summary>
         [ForeignKey("UsuarioId")]
         public IdentityUser Usuario { get; set; }
+
+        /// <summary>
+        /// Id da Permissao
+        /// </summary>
+        [ForeignKey("PermissaoId")]
+        public string PermissaoId { get; set; }
+
+        /// <summary>
+        /// Permissao
+        /// </summary>
+        public Permissao Permissao { get; set; }
     }
 }

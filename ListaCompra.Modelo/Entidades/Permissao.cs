@@ -1,32 +1,26 @@
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ListaCompra.Modelo.Entidades
 {
     /// <summary>
-    /// Grupo
+    /// Permissao
     /// </summary>
-    [Table("Grupo")]
-    public class Grupo : Entidade
+    [Table("Permissao")]
+    public class Permissao : Entidade
     {
         /// <summary>
-        /// Id do grupo
+        /// ID
         /// </summary>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         /// <summary>
-        /// Nome do Grupo
+        /// Nome
         /// </summary>
         [Required]
-        [MaxLength(150)]
+        [MaxLength(50)]
         public string Nome { get; set; }
-
-        /// <summary>
-        /// Usuario do grupo
-        /// </summary>
-        public ICollection<GrupoUsuario> GrupoUsuarios { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-namespace ListaCompra.Modelo.API.Account
+namespace ListaCompra.Modelo.API.Conta
 {
     /// <summary>
     /// Login response
