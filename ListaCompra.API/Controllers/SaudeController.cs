@@ -1,15 +1,24 @@
 using System.Threading.Tasks;
 using ListaCompra.Negocio;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace ListaCompra.API.Controllers
 {
+    /// <summary>
+    /// Saude
+    /// </summary>
     [ApiController]
+    [AllowAnonymous]
     public class SaudeController : ControllerBase
     {
         private readonly NegocioSaude _negocio;
 
+        /// <summary>
+        /// Construtor
+        /// </summary>
+        /// <param name="negocio"></param>
         public SaudeController(NegocioSaude negocio)
         {
             this._negocio = negocio;

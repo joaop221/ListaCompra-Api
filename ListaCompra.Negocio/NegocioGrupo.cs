@@ -55,6 +55,8 @@ namespace ListaCompra.Negocio
         public async Task Atualizar(int id, GrupoRequest model)
         {
             Grupo entidade = this.mapper.Map<Grupo>(model);
+            entidade.Id = id;
+
             await this.repositorio.AtualizarAsync(entidade);
         }
         /// <summary>

@@ -1,21 +1,27 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ListaCompra.Infraestrutura.Filtros;
 using ListaCompra.Modelo.API.Categoria;
 using ListaCompra.Negocio;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace ListaCompra.API.Controllers
 {
+    /// <summary>
+    /// Categoria
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    [ValidacaoFiltro]
+    [Authorize]
     public class CategoriaController : ControllerBase
     {
         private readonly NegocioCategoria negocioCategoria;
 
+        /// <summary>
+        /// Construtor
+        /// </summary>
+        /// <param name="negocioCategoria"></param>
         public CategoriaController(NegocioCategoria negocioCategoria)
         {
             this.negocioCategoria = negocioCategoria;

@@ -1,21 +1,28 @@
 using System.Threading.Tasks;
-using ListaCompra.Infraestrutura.Filtros;
 using ListaCompra.Modelo;
 using ListaCompra.Modelo.API.Conta;
 using ListaCompra.Negocio;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace ListaCompra.API.Controllers
 {
+    /// <summary>
+    /// Conta
+    /// </summary>
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [ValidacaoFiltro]
+    [Authorize]
     public class ContaController : ControllerBase
     {
         private readonly NegocioConta negocioConta;
 
+        /// <summary>
+        /// Construtor
+        /// </summary>
+        /// <param name="negocioConta"></param>
         public ContaController(NegocioConta negocioConta)
         {
             this.negocioConta = negocioConta;
