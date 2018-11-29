@@ -288,3 +288,4 @@ __pycache__/
 *.xsd.cs
 /ListaCompra.Modelo/ListaCompra.Modelo.xml
 /ListaCompra.API/Logs
+/ListaCompra.API/ListaCompra.API.xml
