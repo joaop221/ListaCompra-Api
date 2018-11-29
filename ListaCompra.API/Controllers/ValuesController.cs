@@ -7,17 +7,25 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ListaCompra.API.Controllers
 {
+    /// <summary>
+    /// Values
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class ValuesController : ControllerBase
     {
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly UserManager<IdentityUser> userManager;
+
+        /// <summary>
+        /// Construtor
+        /// </summary>
+        /// <param name="httpContextAccessor"></param>
+        /// <param name="userManager"></param>
         public ValuesController(IHttpContextAccessor httpContextAccessor, UserManager<IdentityUser> userManager)
         {
             this.httpContextAccessor = httpContextAccessor;
             this.userManager = userManager;
-
         }
 
         // GET api/values
