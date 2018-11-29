@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -21,7 +22,7 @@ namespace ListaCompra.Infraestrutura.Validacao
                     fv.RegisterValidatorsFromAssembly(modeloAssembly);
                 });
 
-            ValidatorOptions.LanguageManager = new TraducaoPtBr();
+            ValidatorOptions.LanguageManager.Culture = new CultureInfo("pt-BR");
 
             return mvcBuilder;
         }
