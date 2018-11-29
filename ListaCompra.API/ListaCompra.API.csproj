@@ -5,6 +5,14 @@
     <UserSecretsId>9e3b1485-d881-4e43-9418-e566cb0d74b6</UserSecretsId>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>D:\GitHub\ListaCompra-Api\ListaCompra.API\ListaCompra.API.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>D:\GitHub\ListaCompra-Api\ListaCompra.API\ListaCompra.API.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>

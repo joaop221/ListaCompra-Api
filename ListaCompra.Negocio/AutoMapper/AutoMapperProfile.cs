@@ -16,66 +16,55 @@ namespace ListaCompra.Negocio
         {
             #region [ Categoria ]
 
-            CreateMap<Categoria, AtualizaCategoriaRequest>()
+            CreateMap<Categoria, CategoriaRequest>()
                 .ForMember(x => x.Descricao, d => d.MapFrom(i => i.Descricao))
                 .ForMember(x => x.NomeCategoria, d => d.MapFrom(i => i.Nome))
-                ;
-            CreateMap<Categoria, CriaCategoriaRequest>()
-                .ForMember(x => x.Descricao, d => d.MapFrom(i => i.Descricao))
-                .ForMember(x => x.NomeCategoria, d => d.MapFrom(i => i.Nome));
+                .ReverseMap();
 
             CreateMap<Categoria, CategoriaResponse>()
                 .ForMember(x => x.Descricao, d => d.MapFrom(i => i.Descricao))
                 .ForMember(x => x.NomeCategoria, d => d.MapFrom(i => i.Nome))
-                .ForMember(x => x.Id, d => d.MapFrom(i => i.Id));
+                .ForMember(x => x.Id, d => d.MapFrom(i => i.Id))
+                .ReverseMap();
 
             #endregion [ Categoria ]
 
             #region [ Grupo ]
 
-            CreateMap<Grupo, AtualizaGrupoRequest>()
-                .ForMember(x => x.Nome, d => d.MapFrom(i => i.Nome));
-
-            CreateMap<Grupo, CriaGrupoRequest>()
-                .ForMember(x => x.Nome, d => d.MapFrom(i => i.Nome));
+            CreateMap<Grupo, GrupoRequest>()
+                .ForMember(x => x.Nome, d => d.MapFrom(i => i.Nome))
+                .ReverseMap();
 
             CreateMap<Grupo, GrupoResponse>()
                 .ForMember(x => x.Nome, d => d.MapFrom(i => i.Nome))
-                .ForMember(x => x.Id, d => d.MapFrom(i => i.Id));
+                .ForMember(x => x.Id, d => d.MapFrom(i => i.Id))
+                .ReverseMap();
 
             #endregion [ Grupo ]
 
             #region [ Lista ]
 
-            CreateMap<Lista, AtualizaListaRequest>()
+            CreateMap<Lista, ListaRequest>()
                 .ForMember(x => x.GrupoId, d => d.MapFrom(i => i.GrupoId))
-                .ForMember(x => x.Titulo, d => d.MapFrom(i => i.Titulo));
-
-            CreateMap<Lista, CriaListaRequest>()
-                .ForMember(x => x.GrupoId, d => d.MapFrom(i => i.GrupoId))
-                .ForMember(x => x.Titulo, d => d.MapFrom(i => i.Titulo));
+                .ForMember(x => x.Titulo, d => d.MapFrom(i => i.Titulo))
+                .ReverseMap();
 
             CreateMap<Lista, ListaResponse>()
                 .ForMember(x => x.GrupoId, d => d.MapFrom(i => i.GrupoId))
-                .ForMember(x => x.Titulo, d => d.MapFrom(i => i.Titulo));
+                .ForMember(x => x.Titulo, d => d.MapFrom(i => i.Titulo))
+                .ReverseMap();
 
             #endregion [ Lista ]
 
             #region [ Produto ]
 
-            CreateMap<Produto, AtualizaProdutoRequest>()
+            CreateMap<Produto, ProdutoRequest>()
                 .ForMember(x => x.Descricao, d => d.MapFrom(i => i.Descricao))
                 .ForMember(x => x.Nome, d => d.MapFrom(i => i.Nome))
                 .ForMember(x => x.Quantidade, d => d.MapFrom(i => i.Quantidade))
                 .ForMember(x => x.CategoriaId, d => d.MapFrom(i => i.CategoriaId))
-                .ForMember(x => x.Valor, d => d.MapFrom(i => i.Valor));
-
-            CreateMap<Produto, CriaProdutoRequest>()
-                .ForMember(x => x.Descricao, d => d.MapFrom(i => i.Descricao))
-                .ForMember(x => x.Nome, d => d.MapFrom(i => i.Nome))
-                .ForMember(x => x.Quantidade, d => d.MapFrom(i => i.Quantidade))
-                .ForMember(x => x.CategoriaId, d => d.MapFrom(i => i.CategoriaId))
-                .ForMember(x => x.Valor, d => d.MapFrom(i => i.Valor));
+                .ForMember(x => x.Valor, d => d.MapFrom(i => i.Valor))
+                .ReverseMap();
 
             CreateMap<Produto, ProdutoResponse>()
                 .ForMember(x => x.Descricao, d => d.MapFrom(i => i.Descricao))
@@ -83,7 +72,8 @@ namespace ListaCompra.Negocio
                 .ForMember(x => x.Quantidade, d => d.MapFrom(i => i.Quantidade))
                 .ForMember(x => x.CategoriaId, d => d.MapFrom(i => i.CategoriaId))
                 .ForMember(x => x.Id, d => d.MapFrom(i => i.Id))
-                .ForMember(x => x.Valor, d => d.MapFrom(i => i.Valor));
+                .ForMember(x => x.Valor, d => d.MapFrom(i => i.Valor))
+                .ReverseMap();
 
             #endregion [ Produto ]
         }

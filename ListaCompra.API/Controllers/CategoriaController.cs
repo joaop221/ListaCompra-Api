@@ -24,12 +24,13 @@ namespace ListaCompra.API.Controllers
         /// <summary>
         /// Obter
         /// </summary>
+        /// <remarks>Obter</remarks>
         [SwaggerResponse(200, "Sucesso", typeof(CategoriaResponse))]
         [SwaggerResponse(503, Description = "API ou algum recurso que ela depende está fora do ar")]
         [SwaggerResponse(500, Description = "Erro interno desconhecido")]
         [HttpGet("{id}")]
         public async Task<CategoriaResponse> Obter([FromRoute] int id)
-            => throw new NotImplementedException();
+            => await this.negocioCategoria.Obter(id);
 
         /// <summary>
         /// Listar
@@ -39,7 +40,7 @@ namespace ListaCompra.API.Controllers
         [SwaggerResponse(500, Description = "Erro interno desconhecido")]
         [HttpGet("Listar")]
         public async Task<List<CategoriaResponse>> Listar()
-            => throw new NotImplementedException();
+            => await this.negocioCategoria.Listar();
 
         /// <summary>
         /// Criar
@@ -49,8 +50,8 @@ namespace ListaCompra.API.Controllers
         [SwaggerResponse(503, Description = "API ou algum recurso que ela depende está fora do ar")]
         [SwaggerResponse(500, Description = "Erro interno desconhecido")]
         [HttpPost]
-        public async Task<CategoriaResponse> Criar([FromBody] CriaCategoriaRequest model)
-            => throw new NotImplementedException();
+        public async Task<CategoriaResponse> Criar([FromBody] CategoriaRequest model)
+            => await this.negocioCategoria.Criar(model);
 
         /// <summary>
         /// Atualizar
@@ -59,8 +60,8 @@ namespace ListaCompra.API.Controllers
         [SwaggerResponse(503, Description = "API ou algum recurso que ela depende está fora do ar")]
         [SwaggerResponse(500, Description = "Erro interno desconhecido")]
         [HttpPut("{id}")]
-        public async Task<CategoriaResponse> Atualizar([FromRoute] int id, [FromBody] AtualizaCategoriaRequest model)
-            => throw new NotImplementedException();
+        public async Task Atualizar([FromRoute] int id, [FromBody] CategoriaRequest model)
+            => await this.negocioCategoria.Atualizar(id, model);
 
         /// <summary>
         /// Excluir
@@ -70,6 +71,6 @@ namespace ListaCompra.API.Controllers
         [SwaggerResponse(500, Description = "Erro interno desconhecido")]
         [HttpDelete("{id}")]
         public async Task Excluir([FromRoute] int id)
-            => throw new NotImplementedException();
+            => await this.negocioCategoria.Excluir(id);
     }
 }

@@ -136,7 +136,10 @@ namespace ListaCompra.Infraestrutura.Filtros
                               Class = frame.GetMethod().DeclaringType,
                           });
 
-            return query.First().Class.FullName;
+            if (query.FirstOrDefault() == null)
+                return ex.StackTrace;
+
+            return query.FirstOrDefault().Class.FullName;
         }
     }
 }

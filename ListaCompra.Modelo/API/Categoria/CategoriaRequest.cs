@@ -5,7 +5,7 @@ namespace ListaCompra.Modelo.API.Categoria
     /// <summary>
     /// Request para atualizar categoria
     /// </summary>
-    public class AtualizaCategoriaRequest
+    public class CategoriaRequest
     {
         /// <summary>
         /// Nome da categoria
@@ -21,12 +21,12 @@ namespace ListaCompra.Modelo.API.Categoria
     /// <summary>
     /// Validacao
     /// </summary>
-    public class AtualizaCategoriaRequestValidacao : AbstractValidator<AtualizaCategoriaRequest>
+    public class CategoriaRequestValidacao : AbstractValidator<CategoriaRequest>
     {
         /// <summary>
         /// Rergras
         /// </summary>
-        public AtualizaCategoriaRequestValidacao()
+        public CategoriaRequestValidacao()
         {
             RuleFor(x => x.NomeCategoria)
                 .NotEmpty()

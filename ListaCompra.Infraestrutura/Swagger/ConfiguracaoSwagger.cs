@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,6 +31,12 @@ namespace ListaCompra.Infraestrutura.Swagger
                     c.EnableAnnotations();
 
                     c.IncludeXmlComments(string.Format(@"{0}\ListaCompra.Modelo.xml", AppDomain.CurrentDomain.BaseDirectory), true);
+                    c.IncludeXmlComments(string.Format(@"{0}\ListaCompra.API.xml", AppDomain.CurrentDomain.BaseDirectory), true);
+
+                    c.AddSecurityDefinition("Bearer", new ApiKeyScheme { In = "header", Description = "Header de Autorização JWT usando o esquema Bearer. Exemplo: \"Autorização: Bearer { token } \"", Name = "Authorization", Type = "apiKey" });
+                    c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>> {
+                        { "Bearer", Enumerable.Empty<string>() }
+                    });
                 });
 
             return services;

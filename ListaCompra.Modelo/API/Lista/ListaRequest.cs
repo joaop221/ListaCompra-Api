@@ -2,7 +2,7 @@ using FluentValidation;
 
 namespace ListaCompra.Modelo.API.Lista
 {
-    public class CriaListaRequest
+    public class ListaRequest
     {
         /// <summary>
         /// Titulo da lista
@@ -19,12 +19,12 @@ namespace ListaCompra.Modelo.API.Lista
     /// <summary>
     /// Validacao
     /// </summary>
-    public class CriaListaRequestValidacao : AbstractValidator<CriaListaRequest>
+    public class ListaRequestValidacao : AbstractValidator<ListaRequest>
     {
         /// <summary>
         /// Rergras
         /// </summary>
-        public CriaListaRequestValidacao()
+        public ListaRequestValidacao()
         {
             RuleFor(x => x.Titulo)
                 .NotEmpty()

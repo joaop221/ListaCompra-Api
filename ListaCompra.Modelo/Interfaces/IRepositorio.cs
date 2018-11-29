@@ -17,7 +17,7 @@ namespace ListaCompra.Modelo.Interfaces
         /// Inclui o item no banco
         /// </summary>
         /// <returns>Objeto</returns>
-        Task InserirAsync(TEntidade item, int? setTimeoutTo = null, int reattempts = 0);
+        Task<TEntidade> InserirAsync(TEntidade item, int? setTimeoutTo = null, int reattempts = 0);
 
         /// <summary>
         /// Efetua a inclusão da lista enviada
@@ -105,6 +105,13 @@ namespace ListaCompra.Modelo.Interfaces
         /// <param name="chave"></param>
         /// <returns>Objeto</returns>
         Task<TEntidade> ObterAsync(object[] chave);
+
+        /// <summary>
+        /// Retorna o objeto solicitado
+        /// </summary>
+        /// <param name="filtro"></param>
+        /// <returns>Objeto</returns>
+        Task<TEntidade> ObterAsync(Expression<Func<TEntidade, bool>> filtro);
 
         #endregion [ Métodos Obter ]
 

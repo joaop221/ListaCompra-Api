@@ -1,6 +1,7 @@
-using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using ListaCompra.Modelo.API.Lista;
 using ListaCompra.Modelo.Entidades;
 using ListaCompra.Modelo.Interfaces;
 
@@ -20,32 +21,48 @@ namespace ListaCompra.Negocio
         /// <summary>
         /// Obter
         /// </summary>
-        public async Task<object> Obter(int id)
-            => throw new NotImplementedException();
+        public async Task<ListaResponse> Obter(int id)
+        {
+            Lista entidade = await this.repositorio.ObterAsync(id);
+
+            return this.mapper.Map<ListaResponse>(entidade);
+        }
 
         /// <summary>
         /// Listar
         /// </summary>
-        public async Task<object> Listar(object model)
-            => throw new NotImplementedException();
+        public async Task<List<ListaResponse>> Listar()
+        {
+            List<Lista> entidade = await this.repositorio.ConsultarAsync(x => true);
+
+            return this.mapper.Map<List<ListaResponse>>(entidade);
+        }
 
         /// <summary>
         /// Criar
         /// </summary>
         /// <returns>Resultado do check</returns>
-        public async Task<object> Criar(object model)
-            => throw new NotImplementedException();
+        public async Task<ListaResponse> Criar(ListaRequest model)
+        {
+            Lista entidade = this.mapper.Map<Lista>(model);
+
+            entidade = await this.repositorio.InserirAsync(entidade);
+
+            return this.mapper.Map<ListaResponse>(entidade);
+        }
 
         /// <summary>
         /// Atualizar
         /// </summary>
-        public async Task<object> Atualizar(int id, object model)
-            => throw new NotImplementedException();
+        public async Task Atualizar(int id, ListaRequest model)
+        {
+            Lista entidade = this.mapper.Map<Lista>(model);
+            await this.repositorio.AtualizarAsync(entidade);
+        }
 
         /// <summary>
         /// Excluir
         /// </summary>
-        public async Task<object> Excluir(int id)
-            => throw new NotImplementedException();
+        public async Task Excluir(int id) => await this.repositorio.ExcluirAsync(x => x.Id == id);
     }
 }

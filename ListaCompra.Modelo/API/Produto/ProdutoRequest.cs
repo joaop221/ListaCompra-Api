@@ -5,7 +5,7 @@ namespace ListaCompra.Modelo.API.Produto
     /// <summary>
     /// Request para criar produto
     /// </summary>
-    public class CriaProdutoRequest
+    public class ProdutoRequest
     {
         /// <summary>
         /// Nome do produtos
@@ -36,12 +36,12 @@ namespace ListaCompra.Modelo.API.Produto
     /// <summary>
     /// Validacao
     /// </summary>
-    public class CriaProdutoRequestValidacao : AbstractValidator<CriaProdutoRequest>
+    public class ProdutoRequestValidacao : AbstractValidator<ProdutoRequest>
     {
         /// <summary>
         /// Rergras
         /// </summary>
-        public CriaProdutoRequestValidacao()
+        public ProdutoRequestValidacao()
         {
             RuleFor(x => x.Nome)
                 .NotEmpty()

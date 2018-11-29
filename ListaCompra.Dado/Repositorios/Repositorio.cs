@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using ListaCompra.Dado.EF.Core;
 using ListaCompra.Modelo.Entidades;
+using ListaCompra.Modelo.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +15,7 @@ using Z.EntityFramework.Plus;
 
 namespace ListaCompra.Dado.Repositorios
 {
-    public class Repositorio<TEntidade> : RepositorioBase
+    public class Repositorio<TEntidade> : RepositorioBase, IRepositorio<TEntidade>
                 where TEntidade : Entidade
 
     {
@@ -38,13 +39,13 @@ namespace ListaCompra.Dado.Repositorios
         /// Inclui o item no banco
         /// </summary>
         /// <returns>Objeto</returns>
-        public async Task InserirAsync(TEntidade item, int? setTimeoutTo = null, int reattempts = 0)
+        public async Task<TEntidade> InserirAsync(TEntidade item, int? setTimeoutTo = null, int reattempts = 0)
         {
             var usuarioAtual = await ObterUsuarioAtualAsync();
 
             //Verifica se existe algum item
             if (item == null)
-                return;
+                return item;
 
             //Define os valores padrões do item
             DefinirValorPadrao(item, OperacaoBanco.Inserir, usuarioAtual);
@@ -64,8 +65,10 @@ namespace ListaCompra.Dado.Repositorios
                 if (reattempts > 3)
                     throw;
 
-                await InserirAsync(item, setTimeoutTo, ++reattempts);
+                return await InserirAsync(item, setTimeoutTo, ++reattempts);
             }
+
+            return item;
         }
 
         /// <summary>
@@ -344,6 +347,25 @@ namespace ListaCompra.Dado.Repositorios
 
             DbSet<TEntidade> tabela = this.Db.Set<TEntidade>();
             retorno = tabela.Find(chave);
+
+            //Retorna
+            return retorno;
+        }
+        /// <summary>
+        /// Retorna o objeto solicitado
+        /// </summary>
+        /// <param name="cod_anexo">ID do item</param>
+        /// <returns>Objeto</returns>
+        public async Task<TEntidade> ObterAsync(Expression<Func<TEntidade, bool>> filtro)
+        {
+            var retorno = default(TEntidade);
+
+            //Busca o objeto solicitado
+
+            this.Db.ChangeTracker.AutoDetectChangesEnabled = false;
+
+            DbSet<TEntidade> tabela = this.Db.Set<TEntidade>();
+            retorno = await tabela.FirstOrDefaultAsync(filtro);
 
             //Retorna
             return retorno;

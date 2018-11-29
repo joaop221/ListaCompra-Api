@@ -5,7 +5,7 @@ namespace ListaCompra.Modelo.API.Grupo
     /// <summary>
     /// Request para atualizar categoria
     /// </summary>
-    public class CriaGrupoRequest
+    public class GrupoRequest
     {
         /// <summary>
         /// Nome do Grupo
@@ -16,12 +16,12 @@ namespace ListaCompra.Modelo.API.Grupo
     /// <summary>
     /// Validacao
     /// </summary>
-    public class CriaGrupoRequestValidacao : AbstractValidator<CriaGrupoRequest>
+    public class GrupoRequestValidacao : AbstractValidator<GrupoRequest>
     {
         /// <summary>
         /// Rergras
         /// </summary>
-        public CriaGrupoRequestValidacao()
+        public GrupoRequestValidacao()
         {
             RuleFor(x => x.Nome)
                 .MaximumLength(150);
