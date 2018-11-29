@@ -57,6 +57,7 @@ namespace ListaCompra.Negocio
         public async Task Atualizar(int id, CategoriaRequest model)
         {
             Categoria entidade = this.mapper.Map<Categoria>(model);
+            entidade.Id = id;
             await this.repositorio.AtualizarAsync(entidade);
         }
 
