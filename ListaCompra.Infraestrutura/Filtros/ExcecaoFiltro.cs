@@ -3,22 +3,28 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using ListaCompra.Infraestrutura.Tratamento;
 using ListaCompra.Modelo;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Serilog.Context;
 
 namespace ListaCompra.Infraestrutura.Filtros
 {
     public class ExcecaoFiltro : ExceptionFilterAttribute
     {
-        private readonly ILogger<ExcecaoFiltro> _logger;
+        private readonly ILogger<ExcecaoFiltro> logger;
+        private UserManager<IdentityUser> userManager;
+        private readonly IServiceProvider service;
 
-        public ExcecaoFiltro(ILogger<ExcecaoFiltro> logger)
+        public ExcecaoFiltro(ILogger<ExcecaoFiltro> logger, IServiceProvider service)
         {
-            this._logger = logger;
+            this.logger = logger;
+            this.service = service;
         }
 
         /// <summary>
@@ -29,6 +35,10 @@ namespace ListaCompra.Infraestrutura.Filtros
         {
             Exception ex = context.Exception;
 
+            var userId = RecuperaUsuarioID(context.HttpContext.User);
+
+            LogContext.PushProperty("UsuarioId", userId);
+
             // Usa a primeira Exception caso ela seja uma AggregateException
             if (ex is AggregateException aggregate)
                 ex = aggregate.InnerException;
@@ -36,46 +46,55 @@ namespace ListaCompra.Infraestrutura.Filtros
             context.Result = CriaResponse(ex);
         }
 
+        private string RecuperaUsuarioID(ClaimsPrincipal claims)
+        {
+            if (this.userManager == null)
+                this.userManager = (UserManager<IdentityUser>)this.service.GetService(typeof(UserManager<IdentityUser>));
+
+            var userId = this.userManager?.GetUserId(claims);
+            return userId;
+        }
+
         private ContentResult CriaResponse(Exception ex)
         {
             if (ex is ValidacaoExcecao excecaoValidacao) // Em caso de erro de validacao, usado pelo metodo 'Validate' do BaseController
             {
-                this._logger.LogWarning(excecaoValidacao, excecaoValidacao.Message);
+                this.logger.LogWarning(excecaoValidacao, excecaoValidacao.Message);
 
                 List<RetornoErro> erros = excecaoValidacao.ValidacaoErros;
                 return CriaResponse(erros, HttpStatusCode.BadRequest);
             }
             else if (ex is ApiExcecao excecaoApi) // Em caso de erros que já foram tratados e devem ser lidados como um HttpStatus
             {
-                this._logger.LogError(excecaoApi, excecaoApi.Message);
+                this.logger.LogError(excecaoApi, excecaoApi.Message);
 
                 List<RetornoErro> erros = CriaListaErro(excecaoApi.Codigo, GetExceptionFont(excecaoApi), excecaoApi.Message);
                 return CriaResponse(erros, excecaoApi.StatusCode);
             }
             else if (ex is NegocioExcecao excecaoNegocio) // Em caso de erros na camada de negocio
             {
-                this._logger.LogError(excecaoNegocio, excecaoNegocio.Message);
+                this.logger.LogError(excecaoNegocio, excecaoNegocio.Message);
 
                 List<RetornoErro> erros = CriaListaErro(500, GetExceptionFont(excecaoNegocio), excecaoNegocio.Message);
                 return CriaResponse(erros);
             }
             else if (ex is DadosExcecao excecaoDados) // Em caso de erros na camada de dados
             {
-                this._logger.LogError(excecaoDados, excecaoDados.Message);
+                this.logger.LogError(excecaoDados, excecaoDados.Message);
 
                 List<RetornoErro> erros = CriaListaErro(500, GetExceptionFont(excecaoDados), excecaoDados.Detalhes);
                 return CriaResponse(erros);
             }
             else if (ex is FalhaLoginExcecao falhaLogin) // Em caso de erros na camada de dados
             {
-                this._logger.LogWarning(falhaLogin, falhaLogin.Message);
+                this.logger.LogWarning(falhaLogin, falhaLogin.Message);
 
                 List<RetornoErro> erros = CriaListaErro(401, GetExceptionFont(falhaLogin), falhaLogin.Message);
                 return CriaResponse(erros, HttpStatusCode.Unauthorized);
             }
             else if (ex is RegistroExcecao registroExcecao) // Em caso de erros na camada de dados
             {
-                this._logger.LogWarning(registroExcecao, registroExcecao.Message);
+                this.logger.LogWarning(registroExcecao, registroExcecao.Message);
 
                 return new ContentResult()
                 {
@@ -87,7 +106,7 @@ namespace ListaCompra.Infraestrutura.Filtros
             else // Em caso de erros genericos
             {
                 var excecaoSistema = ex as Exception;
-                this._logger.LogError(excecaoSistema, excecaoSistema.Message);
+                this.logger.LogError(excecaoSistema, excecaoSistema.Message);
 
                 List<RetornoErro> erros = CriaListaErro(500, GetExceptionFont(excecaoSistema), excecaoSistema.Message);
                 return CriaResponse(erros);

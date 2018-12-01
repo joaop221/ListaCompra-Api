@@ -27,25 +27,20 @@ namespace ListaCompra.API
 {
     public class Startup
     {
-        private readonly ILogger<ExcecaoFiltro> _loggerEX;
+        private readonly ILogger<ExcecaoFiltro> loggerEX;
+        private readonly IServiceProvider service;
+        private readonly IConfiguration configuration;
 
-        public Startup(IConfiguration configuration, ILogger<ExcecaoFiltro> logEx)
+        public Startup(IConfiguration configuration, ILogger<ExcecaoFiltro> logEx, IServiceProvider service)
         {
-            this.Configuration = configuration;
-            this._loggerEX = logEx;
+            this.configuration = configuration;
+            this.loggerEX = logEx;
+            this.service = service;
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services
-                .AddMvc(opcoes => AddFilters(opcoes))
-                .ConfigureFluentValidation()
-                .AddJsonOptions(opcoes => AddJsonOptions(opcoes))
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
             services.AddAutoMapper();
 
             // desabilita resposta de bad request automaticas
@@ -68,6 +63,12 @@ namespace ListaCompra.API
             ConfiguracaoDI.RepositorioDI(services);
             // Injeta todas as classes de negocio
             ConfiguracaoDI.NegocioDI(services);
+
+            services
+                .AddMvc(opcoes => AddFilters(opcoes))
+                .ConfigureFluentValidation()
+                .AddJsonOptions(opcoes => AddJsonOptions(opcoes))
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -93,8 +94,9 @@ namespace ListaCompra.API
 
         private void AddFilters(MvcOptions opcoes)
         {
+            var userManager = (UserManager<IdentityUser>)this.service.GetService(typeof(UserManager<IdentityUser>));
             opcoes.Filters.Add(new ValidacaoFiltro());
-            opcoes.Filters.Add(new ExcecaoFiltro(this._loggerEX));
+            opcoes.Filters.Add(new ExcecaoFiltro(this.loggerEX, this.service));
         }
 
         private void AddJsonOptions(MvcJsonOptions opcoes)
@@ -111,7 +113,7 @@ namespace ListaCompra.API
 
         //local function de configuração para ser reutilizada
         private void DbOptionsActionDefault(DbContextOptionsBuilder options)
-            => options.UseSqlServer(this.Configuration.GetConnectionString("Default"));
+            => options.UseSqlServer(this.configuration.GetConnectionString("Default"));
 
         private void ConfiguraBanco(IServiceCollection services)
         {
@@ -151,9 +153,9 @@ namespace ListaCompra.API
                     cfg.SaveToken = true;
                     cfg.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidIssuer = this.Configuration["JwtIssuer"],
-                        ValidAudience = this.Configuration["JwtIssuer"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.Configuration["ChaveJwt"])),
+                        ValidIssuer = this.configuration["JwtIssuer"],
+                        ValidAudience = this.configuration["JwtIssuer"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.configuration["ChaveJwt"])),
                         ClockSkew = TimeSpan.Zero // remove delay of token when expire
                     };
                 });
