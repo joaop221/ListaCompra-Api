@@ -11,7 +11,7 @@ namespace ListaCompra.API.Controllers
     /// <summary>
     /// Produto
     /// </summary>
-    [Route("api/[controller]/")]
+    [Route("[controller]/[action]")]
     [ApiController]
     [Authorize]
     public class ProdutoController : ControllerBase
@@ -43,19 +43,49 @@ namespace ListaCompra.API.Controllers
         [SwaggerResponse(200, "Sucesso", typeof(ProdutoResponse[]))]
         [SwaggerResponse(503, Description = "API ou algum recurso que ela depende está fora do ar")]
         [SwaggerResponse(500, Description = "Erro interno desconhecido")]
-        [HttpPost("Listar")]
+        [HttpGet("")]
         public async Task<List<ProdutoResponse>> Listar()
             => await this.negocioProduto.Listar();
 
         /// <summary>
+        /// Listar usando termo
+        /// </summary>
+        [SwaggerResponse(200, "Sucesso", typeof(ProdutoResponse[]))]
+        [SwaggerResponse(503, Description = "API ou algum recurso que ela depende está fora do ar")]
+        [SwaggerResponse(500, Description = "Erro interno desconhecido")]
+        [HttpGet("/[controller]/Listar/{termo}")]
+        public async Task<List<ProdutoResponse>> ListarComTermo(string termo)
+            => await this.negocioProduto.Listar(termo);
+
+        /// <summary>
         /// Criar
         /// </summary>
-        /// <returns>Resultado do check</returns>
         [SwaggerResponse(200, "Sucesso", typeof(ProdutoResponse))]
         [SwaggerResponse(503, Description = "API ou algum recurso que ela depende está fora do ar")]
         [SwaggerResponse(500, Description = "Erro interno desconhecido")]
         [HttpPost]
         public async Task<ProdutoResponse> Criar([FromBody] ProdutoRequest model)
+            => await this.negocioProduto.Criar(model);
+
+        /// <summary>
+        /// Criar um produto e atrelar ele à uma lista
+        /// </summary>
+        [SwaggerResponse(200, "Sucesso", typeof(ProdutoResponse))]
+        [SwaggerResponse(503, Description = "API ou algum recurso que ela depende está fora do ar")]
+        [SwaggerResponse(500, Description = "Erro interno desconhecido")]
+        [HttpPost("/[controller]/Lista/")]
+        public async Task<ProdutoResponse> CriarNaLista([FromBody] CriaProdutoComListaRequest model)
+            => await this.negocioProduto.Criar(model);
+
+        /// <summary>
+        /// Criar varios produtos e atrelar eles à uma lista
+        /// </summary>
+        /// <returns>Resultado do check</returns>
+        [SwaggerResponse(200, "Sucesso", typeof(ProdutoResponse[]))]
+        [SwaggerResponse(503, Description = "API ou algum recurso que ela depende está fora do ar")]
+        [SwaggerResponse(500, Description = "Erro interno desconhecido")]
+        [HttpPost("/[controller]/Lista/Lote")]
+        public async Task<List<ProdutoResponse>> CriarProdutosNaLista([FromBody] CriaListaProdutoComListaRequest model)
             => await this.negocioProduto.Criar(model);
 
         /// <summary>

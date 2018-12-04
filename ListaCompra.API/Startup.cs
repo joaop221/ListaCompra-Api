@@ -41,7 +41,7 @@ namespace ListaCompra.API
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddMvc(opcoes => AddFilters(opcoes))
+                .AddMvc(opcoes => AddFilters(opcoes))                
                 .ConfigureFluentValidation()
                 .AddJsonOptions(opcoes => AddJsonOptions(opcoes))
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
@@ -124,6 +124,8 @@ namespace ListaCompra.API
 
         private void ConfiguraSeguranca(IServiceCollection services)
         {
+            services.AddAuthorization();
+
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
                 options.Password.RequireDigit = false;

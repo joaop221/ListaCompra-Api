@@ -43,7 +43,7 @@ namespace ListaCompra.Modelo.Entidades
         /// Id da Permissao
         /// </summary>
         [ForeignKey("PermissaoId")]
-        public string PermissaoId { get; set; }
+        public int PermissaoId { get; set; }
 
         /// <summary>
         /// Permissao

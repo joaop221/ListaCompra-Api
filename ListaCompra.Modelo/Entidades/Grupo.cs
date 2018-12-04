@@ -27,6 +27,6 @@ namespace ListaCompra.Modelo.Entidades
         /// <summary>
         /// Usuario do grupo
         /// </summary>
-        public ICollection<GrupoUsuario> GrupoUsuarios { get; set; }
+        public ICollection<GrupoUsuario> GrupoUsuarios { get; } = new List<GrupoUsuario>();
     }
 }

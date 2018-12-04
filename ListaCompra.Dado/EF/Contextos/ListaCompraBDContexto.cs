@@ -139,9 +139,9 @@ namespace ListaCompra.Dado.EF.Contextos
             #region [ Preenche dados ]
 
             builder.Entity<Permissao>()
-                .HasData(new Permissao() { Id = 1, Nome = "Dono", DataInclusao = DateTime.UtcNow, LoginInclusao = "MIGRATION" },
-                         new Permissao() { Id = 2, Nome = "Administrador", DataInclusao = DateTime.UtcNow, LoginInclusao = "MIGRATION" },
-                         new Permissao() { Id = 3, Nome = "Contribuidor", DataInclusao = DateTime.UtcNow, LoginInclusao = "MIGRATION" });
+                .HasData(new Permissao() { PermissaoId = 1, Nome = "Dono", DataInclusao = DateTime.UtcNow, LoginInclusao = "MIGRATION" },
+                         new Permissao() { PermissaoId = 2, Nome = "Administrador", DataInclusao = DateTime.UtcNow, LoginInclusao = "MIGRATION" },
+                         new Permissao() { PermissaoId = 3, Nome = "Contribuidor", DataInclusao = DateTime.UtcNow, LoginInclusao = "MIGRATION" });
 
             #endregion [ Preenche dados ]
 
