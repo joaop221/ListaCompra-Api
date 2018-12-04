@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using FluentValidation;
 
 namespace ListaCompra.Modelo.API.Grupo
@@ -11,6 +12,11 @@ namespace ListaCompra.Modelo.API.Grupo
         /// Nome do Grupo
         /// </summary>
         public string Nome { get; set; }
+
+        /// <summary>
+        /// Lista dos Ids dos usuarios do Grupo
+        /// </summary>
+        public List<int> UsuariosId { get; set; }
     }
 
     /// <summary>
@@ -24,7 +30,11 @@ namespace ListaCompra.Modelo.API.Grupo
         public GrupoRequestValidacao()
         {
             RuleFor(x => x.Nome)
+                .NotEmpty()
                 .MaximumLength(150);
+
+            RuleFor(x => x.UsuariosId)
+                .NotEmpty();
         }
     }
 }

@@ -33,7 +33,7 @@ namespace ListaCompra.Negocio
         /// </summary>
         public async Task<List<ListaResponse>> Listar()
         {
-            List<Lista> entidade = await this.repositorio.ConsultarAsync(x => true);
+            List<Lista> entidade = await this.repositorio.ConsultarAsync(x => x.Excluido == false);
 
             return this.mapper.Map<List<ListaResponse>>(entidade);
         }

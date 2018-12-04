@@ -33,7 +33,7 @@ namespace ListaCompra.Negocio
         /// </summary>
         public async Task<List<GrupoResponse>> Listar()
         {
-            List<Grupo> entidade = await this.repositorio.ConsultarAsync(x => true);
+            List<Grupo> entidade = await this.repositorio.ConsultarAsync(x => x.Excluido == false);
 
             return this.mapper.Map<List<GrupoResponse>>(entidade);
         }
@@ -44,11 +44,12 @@ namespace ListaCompra.Negocio
         public async Task<GrupoResponse> Criar(GrupoRequest model)
         {
             Grupo entidade = this.mapper.Map<Grupo>(model);
-
+            
             entidade = await this.repositorio.InserirAsync(entidade);
 
             return this.mapper.Map<GrupoResponse>(entidade);
         }
+
         /// <summary>
         /// Atualizar
         /// </summary>
