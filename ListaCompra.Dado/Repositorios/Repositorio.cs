@@ -258,9 +258,9 @@ namespace ListaCompra.Dado.Repositorios
         /// <param name="entidade">      Entidade</param>
         /// <param name="chaves">        Lista de chaves para exclusão</param>
         /// <param name="exclusaoFisica">Tipo de exclusão</param>
-        public async Task ExcluirAsync(List<int> chaves, bool exclusaoFisica = false)
+        public async Task ExcluirAsync(bool exclusaoFisica = false, params object[] chaves)
         {
-            if (chaves.Count == 0)
+            if (chaves.Length == 0)
                 return;
 
             //Efetua a exclusão dos itens
@@ -270,13 +270,12 @@ namespace ListaCompra.Dado.Repositorios
             DbSet<TEntidade> tabela = this.Db.Set<TEntidade>();
             var itens = new List<TEntidade>();
 
-            chaves.ForEach(i =>
+            foreach (var i in chaves)
             {
                 TEntidade entidade = tabela.Find(i);
                 if (entidade != null)
                     itens.Add(entidade);
             }
-            );
 
             //Exclui todos os itens
             if (itens.Count > 0)
@@ -316,7 +315,7 @@ namespace ListaCompra.Dado.Repositorios
         /// </summary>
         /// <param name="cod_anexo">ID do item</param>
         /// <returns>Objeto</returns>
-        public async Task<TEntidade> ObterAsync(int chave)
+        public async Task<TEntidade> ObterAsync(object chave)
         {
             var retorno = default(TEntidade);
 
@@ -326,31 +325,12 @@ namespace ListaCompra.Dado.Repositorios
 
             DbSet<TEntidade> tabela = this.Db.Set<TEntidade>();
 
-            retorno = tabela.Find(chave);
+            retorno = await tabela.FindAsync(chave);
 
             //Retorna
             return retorno;
         }
 
-        /// <summary>
-        /// Retorna o objeto solicitado
-        /// </summary>
-        /// <param name="cod_anexo">ID do item</param>
-        /// <returns>Objeto</returns>
-        public async Task<TEntidade> ObterAsync(object[] chave)
-        {
-            var retorno = default(TEntidade);
-
-            //Busca o objeto solicitado
-
-            this.Db.ChangeTracker.AutoDetectChangesEnabled = false;
-
-            DbSet<TEntidade> tabela = this.Db.Set<TEntidade>();
-            retorno = tabela.Find(chave);
-
-            //Retorna
-            return retorno;
-        }
         /// <summary>
         /// Retorna o objeto solicitado
         /// </summary>
@@ -401,20 +381,20 @@ namespace ListaCompra.Dado.Repositorios
                     tabela = tabela.OrderBy(ordenacao);
 
             //Retorna
-            return tabela.ToList();
+            return await tabela.ToListAsync();
         }
 
         /// <summary>
         /// Retorna a lista de objetos
         /// </summary>
         /// <returns>Lista de objetos na base</returns>
-        public async Task<List<TEntidade>> ConsultarAsync(List<int> chaves)
+        public async Task<List<TEntidade>> ConsultarAsync(params object[] chaves)
         {
             var retorno = new List<TEntidade>();
 
             //Busca o objeto solicitado
 
-            chaves.ForEach(async i =>
+            chaves.ToList().ForEach(async i =>
             {
                 TEntidade entidade = await ObterAsync(i);
                 if (entidade != null)
@@ -422,7 +402,7 @@ namespace ListaCompra.Dado.Repositorios
             });
 
             //Retorna
-            return retorno;
+            return await Task.FromResult(retorno);
         }
 
         public async Task<List<TEntidade>> ConsultarAsync(Expression<Func<TEntidade, bool>> filtro, int paginaAtual = -1, int itensPagina = -1, bool ascendente = true)
@@ -443,7 +423,7 @@ namespace ListaCompra.Dado.Repositorios
                 tabela = tabela.Skip(paginaAtual * itensPagina).Take(itensPagina);
 
             //Retorna
-            return tabela.ToList();
+            return await tabela.ToListAsync();
         }
 
         /// <summary>
@@ -466,7 +446,7 @@ namespace ListaCompra.Dado.Repositorios
             else
                 retorno = tabela.Count();
 
-            return retorno;
+            return await Task.FromResult(retorno);
         }
 
         #endregion [ Métodos Listar ]

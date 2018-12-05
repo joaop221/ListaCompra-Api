@@ -1,9 +1,11 @@
 using AutoMapper;
 using ListaCompra.Modelo.API.Categoria;
+using ListaCompra.Modelo.API.Conta;
 using ListaCompra.Modelo.API.Grupo;
 using ListaCompra.Modelo.API.Lista;
 using ListaCompra.Modelo.API.Produto;
 using ListaCompra.Modelo.Entidades;
+using Microsoft.AspNetCore.Identity;
 
 namespace ListaCompra.Negocio
 {
@@ -14,6 +16,16 @@ namespace ListaCompra.Negocio
         /// </summary>
         public AutoMapperProfile()
         {
+
+            #region [ Conta ]
+
+            CreateMap<IdentityUser, Usuario>()
+                .ForMember(x => x.Nome, d => d.MapFrom(i => i.UserName))
+                .ForMember(x => x.Email, d => d.MapFrom(i => i.Email))                
+                .ReverseMap();
+
+            #endregion [ Conta ]
+
             #region [ Categoria ]
 
             CreateMap<Categoria, CategoriaRequest>()

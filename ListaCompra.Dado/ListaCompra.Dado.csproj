@@ -1,10 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <ApplicationIcon />
     <StartupObject />
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -31,5 +32,11 @@
   <ItemGroup>
     <ProjectReference Include="..\ListaCompra.Infraestrutura\ListaCompra.Infraestrutura.csproj" />
     <ProjectReference Include="..\ListaCompra.Modelo\ListaCompra.Modelo.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Migrations\20181205174127_AddColunasPadrao.Designer.cs">
+      <DependentUpon>20181205174127_AddColunasPadrao.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>

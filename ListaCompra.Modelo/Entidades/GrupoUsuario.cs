@@ -8,8 +8,29 @@ namespace ListaCompra.Modelo.Entidades
     /// Relacionamento entre grupo e usuario
     /// </summary>
     [Table("GrupoUsuario")]
-    public class GrupoUsuario
+    public class GrupoUsuario : Entidade
     {
+
+        /// <summary>
+        /// Cria relacionamento do grupo e usuario
+        /// </summary>
+        /// <param name="grupoId"></param>
+        /// <param name="usuarioId"></param>
+        /// <param name="permissaoId"></param>
+        public GrupoUsuario(int grupoId, string usuarioId, int permissaoId)
+        {
+            this.GrupoId = grupoId;
+            this.UsuarioId = usuarioId;
+            this.PermissaoId = permissaoId;
+        }
+
+        /// <summary>
+        /// Cria relacionamento do grupo e usuario
+        /// </summary>
+        public GrupoUsuario()
+        {
+        }
+
         /// <summary>
         /// Id da Grupo x Usuario
         /// </summary>

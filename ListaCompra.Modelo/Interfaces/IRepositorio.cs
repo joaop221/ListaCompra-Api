@@ -44,7 +44,6 @@ namespace ListaCompra.Modelo.Interfaces
         /// <summary>
         /// Atualiza a lista de objetos informados
         /// </summary>
-        /// <typeparam name="T">Tipo de objeto para ser atualizado</typeparam>
         /// <param name="itens">         Lista de entidades</param>
         /// <param name="exclusaoLogica"></param>
         /// <param name="reattempts">    </param>
@@ -75,10 +74,9 @@ namespace ListaCompra.Modelo.Interfaces
         /// <summary>
         /// Exclui os objetos com as chaves informadas
         /// </summary>
-        /// <typeparam name="T">Tipo de entidade de banco</typeparam>
         /// <param name="chaves">        Lista de chaves para exclusão</param>
         /// <param name="exclusaoFisica">Tipo de exclusão</param>
-        Task ExcluirAsync(List<int> chaves, bool exclusaoFisica = false);
+        Task ExcluirAsync(bool exclusaoFisica = false, params object[] chaves);
 
         /// <summary>
         /// Retorna a lista de objetos aplicando um filtro
@@ -97,14 +95,7 @@ namespace ListaCompra.Modelo.Interfaces
         /// </summary>
         /// <param name="chave"></param>
         /// <returns>Objeto</returns>
-        Task<TEntidade> ObterAsync(int chave);
-
-        /// <summary>
-        /// Retorna o objeto solicitado
-        /// </summary>
-        /// <param name="chave"></param>
-        /// <returns>Objeto</returns>
-        Task<TEntidade> ObterAsync(object[] chave);
+        Task<TEntidade> ObterAsync(object chave);
 
         /// <summary>
         /// Retorna o objeto solicitado
@@ -130,7 +121,7 @@ namespace ListaCompra.Modelo.Interfaces
         /// Retorna a lista de objetos
         /// </summary>
         /// <returns>Lista de objetos na base</returns>
-        Task<List<TEntidade>> ConsultarAsync(List<int> chaves);
+        Task<List<TEntidade>> ConsultarAsync(params object[] chaves);
 
         /// <summary>
         /// Retorna a lista de objetos

@@ -11,7 +11,7 @@ namespace ListaCompra.API.Controllers
     /// <summary>
     /// Categoria
     /// </summary>
-    [Route("[controller]/[action]")]
+    [Route("[controller]")]
     [ApiController]
     [Authorize]
     public class CategoriaController : ControllerBase
