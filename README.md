@@ -26,7 +26,7 @@ Disponível para todas as plataformas.
 
 ### Dependências
 
-* .NET Core >= 2.1 - https://www.microsoft.com/net/learn/get-started/windows
+* .NET Core >= 2.1.500 - https://www.microsoft.com/net/learn/get-started/windows
 * Banco de Dados SQL-Server - https://www.microsoft.com/en-us/sql-server/sql-server-2017
 
 # Considerações Finais do Repositório
