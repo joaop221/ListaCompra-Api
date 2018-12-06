@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using ListaCompra.Modelo.API.Lista;
+using ListaCompra.Modelo.Base;
 using ListaCompra.Modelo.Entidades;
-using ListaCompra.Modelo.Interfaces;
 
 namespace ListaCompra.Negocio
 {

@@ -5,8 +5,7 @@ using System.Reflection;
 using ListaCompra.Dado.EF.Core;
 using ListaCompra.Dado.Repositorios;
 using ListaCompra.Modelo;
-using ListaCompra.Modelo.Entidades;
-using ListaCompra.Modelo.Interfaces;
+using ListaCompra.Modelo.Base;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ListaCompra.Negocio

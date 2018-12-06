@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ListaCompra.Dado.EF.Contextos;
+using ListaCompra.Modelo.Base;
 using ListaCompra.Modelo.Entidades;
 using ListaCompra.Modelo.Interfaces;
 using Microsoft.AspNetCore.Identity;

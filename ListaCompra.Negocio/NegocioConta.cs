@@ -9,7 +9,7 @@ using System.Transactions;
 using ListaCompra.Infraestrutura.Tratamento;
 using ListaCompra.Modelo;
 using ListaCompra.Modelo.API.Conta;
-using ListaCompra.Modelo.Interfaces;
+using ListaCompra.Modelo.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;

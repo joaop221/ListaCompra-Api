@@ -7,6 +7,7 @@ using ListaCompra.Infraestrutura.Tratamento;
 using ListaCompra.Infraestrutura.Util;
 using ListaCompra.Modelo.API.Conta;
 using ListaCompra.Modelo.API.Grupo;
+using ListaCompra.Modelo.Base;
 using ListaCompra.Modelo.Entidades;
 using ListaCompra.Modelo.Interfaces;
 using Microsoft.AspNetCore.Http;

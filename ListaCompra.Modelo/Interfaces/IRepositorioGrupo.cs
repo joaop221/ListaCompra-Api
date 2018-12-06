@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ListaCompra.Modelo.Base;
 using ListaCompra.Modelo.Entidades;
 using Microsoft.AspNetCore.Identity;
 

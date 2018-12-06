@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using ListaCompra.Modelo.Base;
 using ListaCompra.Modelo.Interfaces;
 
 namespace ListaCompra.Negocio

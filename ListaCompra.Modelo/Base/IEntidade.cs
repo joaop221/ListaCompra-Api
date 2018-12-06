@@ -1,6 +1,6 @@
 using System;
 
-namespace ListaCompra.Modelo.Interfaces
+namespace ListaCompra.Modelo.Base
 {
     /// <summary>
     /// interface para entidades

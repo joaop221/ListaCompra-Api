@@ -111,7 +111,11 @@ namespace ListaCompra.API
 
         //local function de configuração para ser reutilizada
         private void DbOptionsActionDefault(DbContextOptionsBuilder options)
-            => options.UseSqlServer(this.Configuration.GetConnectionString("Default"));
+        {
+            options
+                .UseLazyLoadingProxies()
+                .UseSqlServer(this.Configuration.GetConnectionString("Default"));
+        }
 
         private void ConfiguraBanco(IServiceCollection services)
         {
