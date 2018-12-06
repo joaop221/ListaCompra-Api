@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using ListaCompra.Infraestrutura.Tratamento;
 using ListaCompra.Modelo.API.Lista;
+using ListaCompra.Modelo.API.Produto;
 using ListaCompra.Modelo.Base;
 using ListaCompra.Modelo.Entidades;
 using Microsoft.AspNetCore.Http;
@@ -16,6 +17,7 @@ namespace ListaCompra.Negocio
     {
         private readonly IRepositorio<Lista> repositorio;
         private readonly IRepositorio<GrupoUsuario> repositorioGrupoUsuario;
+        private readonly IRepositorio<ProdutoLista> repositorioProdutoLista;
         private readonly UserManager<IdentityUser> userManager;
         private readonly HttpContext httpContext;
         private readonly NegocioGrupo negocioGrupo;
@@ -26,32 +28,41 @@ namespace ListaCompra.Negocio
                             UserManager<IdentityUser> userManager,
                             IHttpContextAccessor httpContextAccessor,
                             IRepositorio<GrupoUsuario> repositorioGrupoUsuario,
+                            IRepositorio<ProdutoLista> repositorioProdutoLista,
                             NegocioGrupo negocioGrupo)
         {
             this.repositorio = repositorio;
             this.userManager = userManager;
             this.httpContext = httpContextAccessor.HttpContext;
             this.repositorioGrupoUsuario = repositorioGrupoUsuario;
+            this.repositorioProdutoLista = repositorioProdutoLista;
             this.negocioGrupo = negocioGrupo;
             this.mapper = mapper;
         }
 
         /// <summary>
-        /// Obter
+        /// Obter dados da Lista
         /// </summary>
-        public async Task<ListaResponse> Obter(int id)
+        public async Task<ListaComProduto> Obter(int id)
         {
             // tasks
             Task<Lista> entidadeTask = this.repositorio.ObterAsync(x => x.Id == id, new ListaEntidade<Lista>(x => x.Grupo));
             Lista entidade = await entidadeTask;
 
-            if(entidade == null)
+            if (entidade == null)
                 throw new ApiExcecao(422, "Lista não existe");
 
             if (await ValidaParticipante(entidade.Id) == false)
                 throw new ApiExcecao(403, "Usuario não pode ver a lista pois não é membro do grupo dessa lista");
 
-            return this.mapper.Map<ListaResponse>(entidade);
+            List<ProdutoLista> listaProduto = await this.repositorioProdutoLista.ConsultarAsync(x => x.ListaId == id,
+                                                                                                new ListaEntidade<ProdutoLista>(y => y.Produto));
+
+
+            ListaComProduto response = this.mapper.Map<ListaComProduto>(entidade);
+            response.Produtos = this.mapper.Map<List<ProdutoResponse>>(listaProduto.Select(x => x.Produto).ToList());
+
+            return response;
         }
 
         /// <summary>
@@ -132,7 +143,7 @@ namespace ListaCompra.Negocio
         /// Excluir
         /// </summary>
         public async Task Excluir(int id)
-        {            
+        {
             var isDono = await ValidaPermissaoDonoAsync(id);
             var isModerador = await ValidaPermissaoModeradorAsync(id);
 

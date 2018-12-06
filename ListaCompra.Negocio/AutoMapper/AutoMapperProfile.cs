@@ -66,6 +66,13 @@ namespace ListaCompra.Negocio
                 .ForMember(x => x.Titulo, d => d.MapFrom(i => i.Titulo))
                 .ReverseMap();
 
+            CreateMap<Lista, ListaComProduto>()
+                .ForMember(x => x.Grupo, d => d.MapFrom(i => i.Grupo))
+                .ForMember(x => x.Titulo, d => d.MapFrom(i => i.Titulo))                
+                .ReverseMap();
+
+            
+
             #endregion [ Lista ]
 
             #region [ Produto ]

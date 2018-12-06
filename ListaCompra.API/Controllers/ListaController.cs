@@ -32,11 +32,11 @@ namespace ListaCompra.API.Controllers
         /// <summary>
         /// Obter
         /// </summary>
-        [SwaggerResponse(200, "Sucesso", typeof(ListaResponse))]
+        [SwaggerResponse(200, "Sucesso", typeof(ListaComProduto))]
         [SwaggerResponse(503, Description = "API ou algum recurso que ela depende está fora do ar")]
         [SwaggerResponse(500, Description = "Erro interno desconhecido")]
         [HttpGet("{id}")]
-        public async Task<ListaResponse> Obter([FromRoute] int id)
+        public async Task<ListaComProduto> Obter([FromRoute] int id)
             => await this.negocioLista.Obter(id);
 
         /// <summary>
