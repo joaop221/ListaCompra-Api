@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Transactions;
 using AutoMapper;
 using ListaCompra.Infraestrutura.Tratamento;
 using ListaCompra.Modelo.API.Lista;
@@ -18,9 +19,13 @@ namespace ListaCompra.Negocio
         private readonly IRepositorio<Lista> repositorio;
         private readonly IRepositorio<GrupoUsuario> repositorioGrupoUsuario;
         private readonly IRepositorio<ProdutoLista> repositorioProdutoLista;
+        private readonly IRepositorio<Produto> repositorioProduto;
+        private readonly IRepositorio<Categoria> repositorioCategoria;
         private readonly UserManager<IdentityUser> userManager;
         private readonly HttpContext httpContext;
         private readonly NegocioGrupo negocioGrupo;
+        private readonly NegocioProduto negocioProduto;
+        private readonly NegocioCategoria negocioCategoria;
         private readonly IMapper mapper;
 
         public NegocioLista(IRepositorio<Lista> repositorio,
@@ -29,14 +34,22 @@ namespace ListaCompra.Negocio
                             IHttpContextAccessor httpContextAccessor,
                             IRepositorio<GrupoUsuario> repositorioGrupoUsuario,
                             IRepositorio<ProdutoLista> repositorioProdutoLista,
-                            NegocioGrupo negocioGrupo)
+                            IRepositorio<Produto> repositorioProduto,
+                            IRepositorio<Categoria> repositorioCategoria,
+                            NegocioGrupo negocioGrupo,
+                            NegocioCategoria negocioCategoria,
+                            NegocioProduto negocioProduto)
         {
             this.repositorio = repositorio;
             this.userManager = userManager;
             this.httpContext = httpContextAccessor.HttpContext;
             this.repositorioGrupoUsuario = repositorioGrupoUsuario;
             this.repositorioProdutoLista = repositorioProdutoLista;
+            this.repositorioCategoria = repositorioCategoria;
             this.negocioGrupo = negocioGrupo;
+            this.negocioProduto = negocioProduto;
+            this.repositorioProduto = repositorioProduto;
+            this.negocioCategoria = negocioCategoria;
             this.mapper = mapper;
         }
 
@@ -108,18 +121,22 @@ namespace ListaCompra.Negocio
         /// <returns>Resultado do check</returns>
         public async Task<ListaResponse> CriarComGrupo(ListaComGrupoRequest model)
         {
-            var entidade = new Lista()
+            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                Titulo = model.Titulo
-            };
+                var entidade = new Lista()
+                {
+                    Titulo = model.Titulo
+                };
 
-            API.Grupo.GrupoResponse novoGrupo = await this.negocioGrupo.Criar(model.Grupo);
-            entidade.GrupoId = novoGrupo.Id;
+                API.Grupo.GrupoResponse novoGrupo = await this.negocioGrupo.Criar(model.Grupo);
+                entidade.GrupoId = novoGrupo.Id;
 
-            entidade = await this.repositorio.InserirAsync(entidade);
-            entidade.Grupo = this.mapper.Map<Grupo>(novoGrupo);
+                entidade = await this.repositorio.InserirAsync(entidade);
+                entidade.Grupo = this.mapper.Map<Grupo>(novoGrupo);
 
-            return this.mapper.Map<ListaResponse>(entidade);
+                scope.Complete();
+                return this.mapper.Map<ListaResponse>(entidade);
+            }
         }
 
         /// <summary>
@@ -153,7 +170,68 @@ namespace ListaCompra.Negocio
             await this.repositorio.ExcluirAsync(x => x.Id == id);
         }
 
+        /// <summary>
+        /// Adiciona produto na lista
+        /// </summary>
+        /// <returns>Resultado do check</returns>
+        public async Task AdicionaProduto(int listaId, ProdutoRequest model)
+        {
+            // Verifica se o usuario tem permissao na lista
+            var permissao = await ValidaParticipante(listaId);
+            if (permissao == false)
+                throw new ApiExcecao(403, "Usuario não pode adicionar produto na lista pois não participa desta lista");
+
+            Produto entidade = await GaranteProduto(model);
+
+            await this.repositorioProdutoLista.InserirAsync(new ProdutoLista(entidade.Id, listaId));
+        }
+
+
+
         #region [ Métodos privados ]
+
+        private async Task<Produto> GaranteProduto(ProdutoRequest model)
+        {
+            Produto entidade = null;
+            // Novo produto
+            if (model.Id == null)
+            {
+                Categoria categoria = await GaranteCategoria(model);
+
+                model.CategoriaId = categoria.Id;
+                entidade = this.mapper.Map<Produto>(await this.negocioProduto.Criar(model));
+            }
+            else
+            {
+                // Verifica se o produto existe
+                entidade = await this.repositorioProduto.ObterAsync(model.Id);
+                if (entidade == null)
+                    throw new ApiExcecao(422, "Este produto não existe");
+
+                entidade = this.mapper.Map<Produto>(model);
+            }
+
+            return entidade;
+        }
+
+        private async Task<Categoria> GaranteCategoria(ProdutoRequest model)
+        {
+            Categoria categoria = null;
+            // Nova categoria
+            if (model.CategoriaId == null)
+                categoria = this.mapper.Map<Categoria>(await this.negocioCategoria.Criar(model.Categoria));
+            else
+            {
+                // Verifica se o produto existe
+                categoria = await this.repositorioCategoria.ObterAsync(model.CategoriaId);
+                if (categoria == null)
+                    throw new ApiExcecao(422, "Esta categoria não existe");
+
+                categoria = this.mapper.Map<Categoria>(model.Categoria);
+            }
+
+            return categoria;
+        }
 
         /// <summary>
         /// Valida se o usuario atual faz parte da Lista

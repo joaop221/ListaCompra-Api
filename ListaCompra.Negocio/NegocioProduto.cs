@@ -11,19 +11,16 @@ namespace ListaCompra.Negocio
     public class NegocioProduto : INegocio
     {
         private readonly IRepositorio<Produto> repositorio;
-        private readonly NegocioLista negocioLista;
         private readonly IRepositorio<ProdutoLista> repositorioProdutoLista;
 
         private readonly IMapper mapper;
 
         public NegocioProduto(IRepositorio<Produto> repositorio,
                                 IRepositorio<ProdutoLista> repositorioProdutoLista,
-                                NegocioLista negocioLista,
                                 IMapper mapper)
         {
             this.repositorio = repositorio;
             this.repositorioProdutoLista = repositorioProdutoLista;
-            this.negocioLista = negocioLista;
             this.mapper = mapper;
         }
 

@@ -78,6 +78,7 @@ namespace ListaCompra.Negocio
             #region [ Produto ]
 
             CreateMap<Produto, ProdutoRequest>()
+                .ForMember(x => x.Id, d => d.MapFrom(i => i.Id))
                 .ForMember(x => x.Descricao, d => d.MapFrom(i => i.Descricao))
                 .ForMember(x => x.Nome, d => d.MapFrom(i => i.Nome))
                 .ForMember(x => x.Quantidade, d => d.MapFrom(i => i.Quantidade))
