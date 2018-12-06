@@ -344,15 +344,15 @@ namespace ListaCompra.Dado.Repositorios
 
             IQueryable<TEntidade> tabela = this.Db.Set<TEntidade>().Where(filtro);
 
-            if (carregarEntidades != null && carregarEntidades.Itens != null && carregarEntidades.Itens.Any())
-                foreach (Expression<Func<TEntidade, IEntidade>> path in carregarEntidades.Itens)
-                    tabela = tabela.Include(path);
+            tabela = IncluiEntidades(carregarEntidades, tabela);
 
             retorno = await tabela.FirstOrDefaultAsync();
 
             //Retorna
             return retorno;
         }
+
+
 
         #endregion [ Métodos Obter ]
 
@@ -384,9 +384,7 @@ namespace ListaCompra.Dado.Repositorios
                 else
                     tabela = tabela.OrderBy(ordenacao);
 
-            if (carregarEntidades != null && carregarEntidades.Itens != null && carregarEntidades.Itens.Any())
-                foreach (Expression<Func<TEntidade, IEntidade>> path in carregarEntidades.Itens)
-                    tabela = tabela.Include(path);
+            tabela = IncluiEntidades(carregarEntidades, tabela);
 
             //Retorna
             return await tabela.ToListAsync();
@@ -426,9 +424,7 @@ namespace ListaCompra.Dado.Repositorios
             else
                 tabela = this.Db.Set<TEntidade>().Where(filtro);
 
-            if (carregarEntidades != null && carregarEntidades.Itens != null && carregarEntidades.Itens.Any())
-                foreach (Expression<Func<TEntidade, IEntidade>> path in carregarEntidades.Itens)
-                    tabela = tabela.Include(path);
+            tabela = IncluiEntidades(carregarEntidades, tabela);
 
             //Efetua a busca no banco
             if (paginaAtual > -1 && itensPagina > -1)
@@ -473,6 +469,24 @@ namespace ListaCompra.Dado.Repositorios
         {
             IdentityUser logado = await this.userManager.GetUserAsync(this.httpContextAccessor.HttpContext.User);
             return logado != null ? logado.UserName : string.Concat(Environment.UserDomainName, @"\", Environment.UserName);
+        }
+
+        /// <summary>
+        /// Inclui entidades na consulta
+        /// </summary>
+        /// <param name="carregarEntidades"></param>
+        /// <param name="tabela"></param>
+        /// <returns></returns>
+        protected static IQueryable<TEntidade> IncluiEntidades(ListaEntidade<TEntidade> carregarEntidades, IQueryable<TEntidade> tabela)
+        {
+            if (carregarEntidades != null && carregarEntidades.Itens != null && carregarEntidades.Itens.Any())
+                foreach (Expression<Func<TEntidade, IEntidade>> path in carregarEntidades.Itens)
+                    tabela = tabela.Include(path);
+
+            if (carregarEntidades != null && carregarEntidades.Itens_collection != null && carregarEntidades.Itens_collection.Any())
+                foreach (Expression<Func<TEntidade, IEnumerable<IEntidade>>> path in carregarEntidades.Itens_collection)
+                    tabela = tabela.Include(path);
+            return tabela;
         }
 
         #endregion [ Métodos Auxiliares ]

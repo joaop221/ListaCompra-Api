@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -28,6 +29,7 @@ namespace ListaCompra.Modelo.Entidades
         /// <summary>
         /// Usuario do grupo
         /// </summary>
-        public virtual ICollection<GrupoUsuario> GrupoUsuarios { get; } = new List<GrupoUsuario>();
+        public virtual ICollection<GrupoUsuario> GrupoUsuarios { get; set; } = new List<GrupoUsuario>();
+
     }
 }

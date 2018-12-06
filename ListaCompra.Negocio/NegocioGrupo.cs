@@ -44,14 +44,20 @@ namespace ListaCompra.Negocio
         public async Task<GrupoComUsuariosResponse> Obter(int id)
         {
             // Consultas assincronas
-            Task<Grupo> entidadeTask = this.repositorio.ObterAsync(id);
-            Task<List<IdentityUser>> usuariosTask = this.repositorio.ConsultaUsuariosDoGrupoAsync(id);
+            Task<Grupo> entidadeTask = this.repositorio.ConsultaGrupoComUsuariosAsync(id);
 
             Grupo entidade = await entidadeTask;
-            List<IdentityUser> usuarios = await usuariosTask;
+            var usuarios = entidade.GrupoUsuarios.Select(x => new { x.Usuario, x.PermissaoId}).ToList();
 
             GrupoResponse grupoResponse = this.mapper.Map<GrupoResponse>(entidade);
-            List<Usuario> listaUsuarios = this.mapper.Map<List<Usuario>>(usuarios);
+            List<Usuario> listaUsuarios = this.mapper.Map<List<Usuario>>(usuarios.Select(x => x.Usuario));
+
+            foreach (Usuario item in listaUsuarios)
+            {
+                var usuario = usuarios.FirstOrDefault(x => x.Usuario.UserName == item.Nome);
+                if (usuario != null)
+                    item.Permissao = (API.Grupo.Permissao)usuario.PermissaoId;
+            }
 
             return new GrupoComUsuariosResponse() { Grupo = grupoResponse, Usuarios = listaUsuarios };
         }
@@ -76,10 +82,9 @@ namespace ListaCompra.Negocio
             IdentityUser usuarioAtual = await RecuperaUsuarioAtualAsync();
 
             List<GrupoUsuario> gruposDoUsuario = await this.repositorioGrupoUsuario.ConsultarAsync(x => x.UsuarioId == usuarioAtual.Id
-                                                                                                && x.Excluido == false);
+                                                                                                && x.Excluido == false, new ListaEntidade<GrupoUsuario>(x => x.Grupo));
 
-            List<Grupo> entidade = await this.repositorio.ConsultarAsync(x => gruposDoUsuario.Any(y => y.GrupoId == x.Id)
-                                                                                    && x.Excluido == false);
+            var entidade = gruposDoUsuario.Select(x => x.Grupo).ToList();
 
             return this.mapper.Map<List<GrupoResponse>>(entidade);
         }
@@ -247,11 +252,11 @@ namespace ListaCompra.Negocio
                                                                                             x.GrupoId == id &&
                                                                                             x.Excluido == false);
 
-            if (grupoUsuario == null)            
-                throw new ApiExcecao(403, "Usuario não pode excluir permissao pois não é membro do grupo");            
+            if (grupoUsuario == null)
+                throw new ApiExcecao(403, "Usuario não pode excluir permissao pois não é membro do grupo");
             if (grupoUsuario.PermissaoId != (int)API.Grupo.Permissao.Dono) // Apenas o dono pode excluir o grupo            
                 throw new ApiExcecao(403, "Usuario não pode excluir dono pois não é dono do grupo");
-            
+
             await this.repositorio.ExcluirAsync(x => x.Id == id);
         }
 

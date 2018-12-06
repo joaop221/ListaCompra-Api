@@ -12,10 +12,10 @@ namespace ListaCompra.Modelo.Interfaces
     public interface IRepositorioGrupo : IRepositorio<Grupo>
     {
         /// <summary>
-        /// Consula os usuario de um grupo
+        /// Consulta Grupos com os usuario
         /// </summary>
         /// <param name="grupoId"></param>
         /// <returns></returns>
-        Task<List<IdentityUser>> ConsultaUsuariosDoGrupoAsync(int grupoId);
+        Task<Grupo> ConsultaGrupoComUsuariosAsync(int grupoId);
     }
 }

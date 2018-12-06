@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using ListaCompra.Modelo.Interfaces;
 
 namespace ListaCompra.Modelo.Base
 {
@@ -17,11 +16,27 @@ namespace ListaCompra.Modelo.Base
         public List<Expression<Func<TEntidade, IEntidade>>> Itens = null;
 
         /// <summary>
+        /// Lista de entidades a serem carregadas
+        /// </summary>
+        public List<Expression<Func<TEntidade, IEnumerable<IEntidade>>>> Itens_collection = null;
+
+
+        /// <summary>
         /// Contrutor padrão
         /// </summary>
         public ListaEntidade()
         {
+            this.Itens_collection = new List<Expression<Func<TEntidade, IEnumerable<IEntidade>>>>();
             this.Itens = new List<Expression<Func<TEntidade, IEntidade>>>();
+        }
+
+        /// <summary>
+        /// Contrutor que recebe a lista das entidades
+        /// </summary>
+        /// <param name="entidades"></param>
+        public ListaEntidade(params Expression<Func<TEntidade, IEnumerable<IEntidade>>>[] entidades) : this()
+        {
+            this.Itens_collection.AddRange(entidades);
         }
 
         /// <summary>
@@ -37,7 +52,15 @@ namespace ListaCompra.Modelo.Base
         /// Adiciona nova entidade
         /// </summary>
         /// <param name="expressao"></param>
-        public void Adicionar(Expression<Func<TEntidade, IEntidade>> expressao) => this.Itens.Add(expressao);
+        public void Adicionar(Expression<Func<TEntidade, IEntidade>> expressao)
+            => this.Itens.Add(expressao);
+
+        /// <summary>
+        /// Adiciona nova lista de entidade
+        /// </summary>
+        /// <param name="expressao"></param>
+        public void Adicionar(Expression<Func<TEntidade, IEnumerable<IEntidade>>> expressao)
+            => this.Itens_collection.Add(expressao);
 
     }
 }
