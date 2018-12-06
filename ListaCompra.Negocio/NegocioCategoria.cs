@@ -39,6 +39,16 @@ namespace ListaCompra.Negocio
         }
 
         /// <summary>
+        /// Listar
+        /// </summary>
+        public async Task<List<CategoriaResponse>> Listar(string termo)
+        {
+            List<Categoria> entidade = await this.repositorio.ConsultarAsync(x => x.Nome.Contains(termo) && x.Excluido == false);
+
+            return this.mapper.Map<List<CategoriaResponse>>(entidade);
+        }
+
+        /// <summary>
         /// Criar
         /// </summary>
         /// <returns>Resultado do check</returns>
