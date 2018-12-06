@@ -49,6 +49,16 @@ namespace ListaCompra.API.Controllers
             => await this.negocioCategoria.Listar();
 
         /// <summary>
+        /// Listar usando termo
+        /// </summary>
+        [SwaggerResponse(200, "Sucesso", typeof(CategoriaResponse[]))]
+        [SwaggerResponse(503, Description = "API ou algum recurso que ela depende está fora do ar")]
+        [SwaggerResponse(500, Description = "Erro interno desconhecido")]
+        [HttpGet("/Listar/{termo}")]
+        public async Task<List<CategoriaResponse>> ListarComTermo(string termo)
+            => await this.negocioCategoria.Listar(termo);
+
+        /// <summary>
         /// Criar
         /// </summary>
         /// <returns>Resultado do check</returns>
