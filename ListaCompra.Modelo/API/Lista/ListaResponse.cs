@@ -1,3 +1,5 @@
+using ListaCompra.Modelo.API.Grupo;
+
 namespace ListaCompra.Modelo.API.Lista
 {
     /// <summary>
@@ -16,8 +18,8 @@ namespace ListaCompra.Modelo.API.Lista
         public string Titulo { get; set; }
 
         /// <summary>
-        /// Id do grupo
+        /// Grupo
         /// </summary>
-        public int GrupoId { get; set; }
+        public GrupoResponse Grupo { get; set; }
     }
 }

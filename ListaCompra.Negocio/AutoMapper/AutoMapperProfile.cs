@@ -62,7 +62,7 @@ namespace ListaCompra.Negocio
                 .ReverseMap();
 
             CreateMap<Lista, ListaResponse>()
-                .ForMember(x => x.GrupoId, d => d.MapFrom(i => i.GrupoId))
+                .ForMember(x => x.Grupo, d => d.MapFrom(i => i.Grupo))
                 .ForMember(x => x.Titulo, d => d.MapFrom(i => i.Titulo))
                 .ReverseMap();
 

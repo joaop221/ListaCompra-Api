@@ -56,7 +56,7 @@ namespace ListaCompra.Negocio
             {
                 var usuario = usuarios.FirstOrDefault(x => x.Usuario.UserName == item.Nome);
                 if (usuario != null)
-                    item.Permissao = (API.Grupo.Permissao)usuario.PermissaoId;
+                    item.Permissao = (API.Permissao)usuario.PermissaoId;
             }
 
             return new GrupoComUsuariosResponse() { Grupo = grupoResponse, Usuarios = listaUsuarios };
@@ -164,7 +164,7 @@ namespace ListaCompra.Negocio
                 {
                     GrupoId = grupo.Id,
                     UsuarioId = entidadeUsuario.Id,
-                    PermissaoId = usuario.Permissao == API.Grupo.Permissao.Padrao ? 3 : (int)usuario.Permissao
+                    PermissaoId = usuario.Permissao == API.Permissao.Padrao ? 3 : (int)usuario.Permissao
                 };
                 await this.repositorioGrupoUsuario.InserirAsync(relacionamento);
 
@@ -233,8 +233,8 @@ namespace ListaCompra.Negocio
 
             if (grupoUsuario == null)
                 throw new ApiExcecao(403, "Usuario não pode excluir permissao pois não é membro do grupo");
-            if (grupoUsuario.PermissaoId != (int)API.Grupo.Permissao.Dono
-                && grupoUsuario.PermissaoId != (int)API.Grupo.Permissao.Moderador) // Apenas o dono ou moderador pode alterar o grupo
+            if (grupoUsuario.PermissaoId != (int)API.Permissao.Dono
+                && grupoUsuario.PermissaoId != (int)API.Permissao.Moderador) // Apenas o dono ou moderador pode alterar o grupo
                 throw new ApiExcecao(403, "Usuario não pode alterar o grupo pois não é dono ou moderador do grupo");
 
             await this.repositorio.AtualizarAsync(entidade);
@@ -254,7 +254,7 @@ namespace ListaCompra.Negocio
 
             if (grupoUsuario == null)
                 throw new ApiExcecao(403, "Usuario não pode excluir permissao pois não é membro do grupo");
-            if (grupoUsuario.PermissaoId != (int)API.Grupo.Permissao.Dono) // Apenas o dono pode excluir o grupo            
+            if (grupoUsuario.PermissaoId != (int)API.Permissao.Dono) // Apenas o dono pode excluir o grupo            
                 throw new ApiExcecao(403, "Usuario não pode excluir dono pois não é dono do grupo");
 
             await this.repositorio.ExcluirAsync(x => x.Id == id);
@@ -303,21 +303,21 @@ namespace ListaCompra.Negocio
             {
                 throw new ApiExcecao(403, "Usuario não pode alterar/adicionar/excluir permissao pois não é membro do grupo");
             }
-            else if (usuario.Permissao == API.Grupo.Permissao.Dono) // Se a alteracao for para Dono
+            else if (usuario.Permissao == API.Permissao.Dono) // Se a alteracao for para Dono
             {
-                if (grupoUsuario.PermissaoId != (int)API.Grupo.Permissao.Dono)
+                if (grupoUsuario.PermissaoId != (int)API.Permissao.Dono)
                     throw new ApiExcecao(403, "Usuario não pode promover/adicionar/excluir dono pois não é dono do grupo");
             }
-            else if (usuario.Permissao == API.Grupo.Permissao.Moderador) // Se a alteracao for para Moderador
+            else if (usuario.Permissao == API.Permissao.Moderador) // Se a alteracao for para Moderador
             {
-                if (grupoUsuario.PermissaoId != (int)API.Grupo.Permissao.Dono &&
-                    grupoUsuario.PermissaoId != (int)API.Grupo.Permissao.Moderador)
+                if (grupoUsuario.PermissaoId != (int)API.Permissao.Dono &&
+                    grupoUsuario.PermissaoId != (int)API.Permissao.Moderador)
                     throw new ApiExcecao(403, "Usuario não pode promover/adicionar/excluir um moderador pois não é dono ou moderador do grupo");
             }
-            else if (usuario.Permissao == API.Grupo.Permissao.Membro) // Se a alteracao for para Membro
+            else if (usuario.Permissao == API.Permissao.Membro) // Se a alteracao for para Membro
             {
-                if (grupoUsuario.PermissaoId != (int)API.Grupo.Permissao.Dono &&
-                    grupoUsuario.PermissaoId != (int)API.Grupo.Permissao.Moderador)
+                if (grupoUsuario.PermissaoId != (int)API.Permissao.Dono &&
+                    grupoUsuario.PermissaoId != (int)API.Permissao.Moderador)
                     throw new ApiExcecao(403, "Usuario não pode promover/adicionar/excluir um membro pois não é dono ou moderador do grupo");
             }
 

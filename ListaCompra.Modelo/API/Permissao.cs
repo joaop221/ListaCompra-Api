@@ -1,4 +1,4 @@
-namespace ListaCompra.Modelo.API.Grupo
+namespace ListaCompra.Modelo.API
 {
     /// <summary>
     /// Permissao

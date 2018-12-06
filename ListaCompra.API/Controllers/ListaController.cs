@@ -40,7 +40,17 @@ namespace ListaCompra.API.Controllers
             => await this.negocioLista.Obter(id);
 
         /// <summary>
-        /// Listar
+        /// Listar meus
+        /// </summary>
+        [SwaggerResponse(200, "Sucesso", typeof(ListaResponse[]))]
+        [SwaggerResponse(503, Description = "API ou algum recurso que ela depende está fora do ar")]
+        [SwaggerResponse(500, Description = "Erro interno desconhecido")]
+        [HttpPost("Listar/Meu")]
+        public async Task<List<ListaResponse>> ListarMeus()
+            => await this.negocioLista.ListarMinhasListas();
+
+        /// <summary>
+        /// Listar todos
         /// </summary>
         [SwaggerResponse(200, "Sucesso", typeof(ListaResponse[]))]
         [SwaggerResponse(503, Description = "API ou algum recurso que ela depende está fora do ar")]
@@ -56,9 +66,20 @@ namespace ListaCompra.API.Controllers
         [SwaggerResponse(200, "Sucesso", typeof(ListaResponse))]
         [SwaggerResponse(503, Description = "API ou algum recurso que ela depende está fora do ar")]
         [SwaggerResponse(500, Description = "Erro interno desconhecido")]
-        [HttpPost]
+        [HttpPost()]
         public async Task<ListaResponse> Criar([FromBody] ListaRequest model)
             => await this.negocioLista.Criar(model);
+
+        /// <summary>
+        /// Criar
+        /// </summary>
+        /// <returns>Resultado do check</returns>
+        [SwaggerResponse(200, "Sucesso", typeof(ListaResponse))]
+        [SwaggerResponse(503, Description = "API ou algum recurso que ela depende está fora do ar")]
+        [SwaggerResponse(500, Description = "Erro interno desconhecido")]
+        [HttpPost("Grupo")]
+        public async Task<ListaResponse> CriarComGrupo([FromBody] ListaComGrupoRequest model)
+            => await this.negocioLista.CriarComGrupo(model);
 
         /// <summary>
         /// Atualizar
