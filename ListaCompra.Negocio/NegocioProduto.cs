@@ -21,7 +21,6 @@ namespace ListaCompra.Negocio
         private readonly IRepositorio<Lista> repositorioLista;
         private readonly UserManager<IdentityUser> userManager;
         private readonly HttpContext httpContext;
-        private readonly NegocioGrupo negocioGrupo;
         private readonly NegocioCategoria negocioCategoria;
         private readonly IMapper mapper;
 
@@ -33,17 +32,16 @@ namespace ListaCompra.Negocio
                             IRepositorio<GrupoUsuario> repositorioGrupoUsuario,
                             IRepositorio<ProdutoLista> repositorioProdutoLista,
                             IRepositorio<Categoria> repositorioCategoria,
-                            NegocioGrupo negocioGrupo,
                             NegocioCategoria negocioCategoria,
-                            NegocioProduto negocioProduto)
+                            IRepositorio<Lista> repositorioLista)
         {
             this.repositorio = repositorio;
             this.userManager = userManager;
             this.httpContext = httpContextAccessor.HttpContext;
             this.repositorioGrupoUsuario = repositorioGrupoUsuario;
             this.repositorioProdutoLista = repositorioProdutoLista;
+            this.repositorioLista = repositorioLista;
             this.repositorioCategoria = repositorioCategoria;
-            this.negocioGrupo = negocioGrupo;
             this.negocioCategoria = negocioCategoria;
             this.mapper = mapper;
         }
@@ -171,12 +169,12 @@ namespace ListaCompra.Negocio
                 Categoria categoria = await GaranteCategoria(model);
 
                 model.CategoriaId = categoria.Id;
-                entidade = this.mapper.Map<Produto>(await this.negocioProduto.Criar(model));
+                entidade = this.mapper.Map<Produto>(await Criar(model));
             }
             else
             {
                 // Verifica se o produto existe
-                entidade = await this.ObterAsync(model.Id);
+                entidade = await this.repositorio.ObterAsync(model.Id.GetValueOrDefault());
                 if (entidade == null)
                     throw new ApiExcecao(422, "Este produto não existe");
 

@@ -20,10 +20,9 @@ namespace ListaCompra.Negocio
     {
         private readonly IRepositorioGrupo repositorio;
         private readonly IRepositorio<GrupoUsuario> repositorioGrupoUsuario;
-        private readonly IMapper mapper;
         private readonly UserManager<IdentityUser> userManager;
         private readonly HttpContext httpContext;
-
+        private readonly IMapper mapper;
 
         public NegocioGrupo(IRepositorioGrupo repositorio,
                             UserManager<IdentityUser> userManager,
@@ -104,7 +103,7 @@ namespace ListaCompra.Negocio
             entidade = await entidadeTask;
 
             // Adiciona o usuario no proprio grupo que está sendo criando
-            await this.repositorioGrupoUsuario.InserirAsync(new GrupoUsuario(entidade.Id, usuario.Id, 1));
+            await this.repositorioGrupoUsuario.InserirAsync(new GrupoUsuario(entidade.Id, usuario.Id, (int)API.Permissao.Dono));
 
             return this.mapper.Map<GrupoResponse>(entidade);
         }
@@ -132,9 +131,9 @@ namespace ListaCompra.Negocio
                 {
                     GrupoUsuario relacionamento;
                     if (item.UserName.ToUpper() == usuario.UserName.ToUpper())
-                        relacionamento = new GrupoUsuario(entidadeGrupo.Id, item.Id, 1); // usuario Dono
+                        relacionamento = new GrupoUsuario(entidadeGrupo.Id, item.Id, (int)API.Permissao.Dono); // usuario Dono
                     else
-                        relacionamento = new GrupoUsuario(entidadeGrupo.Id, item.Id, 3); // Usuario contribuidor 
+                        relacionamento = new GrupoUsuario(entidadeGrupo.Id, item.Id, (int)API.Permissao.Membro); // Usuario contribuidor 
 
                     // Adiciona o usuario no proprio grupo que está sendo criando
                     await this.repositorioGrupoUsuario.InserirAsync(relacionamento);

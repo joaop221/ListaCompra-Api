@@ -19,13 +19,9 @@ namespace ListaCompra.Negocio
         private readonly IRepositorio<Lista> repositorio;
         private readonly IRepositorio<GrupoUsuario> repositorioGrupoUsuario;
         private readonly IRepositorio<ProdutoLista> repositorioProdutoLista;
-        private readonly IRepositorio<Produto> repositorioProduto;
-        private readonly IRepositorio<Categoria> repositorioCategoria;
         private readonly UserManager<IdentityUser> userManager;
         private readonly HttpContext httpContext;
         private readonly NegocioGrupo negocioGrupo;
-        private readonly NegocioProduto negocioProduto;
-        private readonly NegocioCategoria negocioCategoria;
         private readonly IMapper mapper;
 
         public NegocioLista(IRepositorio<Lista> repositorio,
@@ -45,11 +41,7 @@ namespace ListaCompra.Negocio
             this.httpContext = httpContextAccessor.HttpContext;
             this.repositorioGrupoUsuario = repositorioGrupoUsuario;
             this.repositorioProdutoLista = repositorioProdutoLista;
-            this.repositorioCategoria = repositorioCategoria;
             this.negocioGrupo = negocioGrupo;
-            this.negocioProduto = negocioProduto;
-            this.repositorioProduto = repositorioProduto;
-            this.negocioCategoria = negocioCategoria;
             this.mapper = mapper;
         }
 
@@ -170,68 +162,7 @@ namespace ListaCompra.Negocio
             await this.repositorio.ExcluirAsync(x => x.Id == id);
         }
 
-        /// <summary>
-        /// Adiciona produto na lista
-        /// </summary>
-        /// <returns>Resultado do check</returns>
-        public async Task AdicionaProduto(int listaId, ProdutoRequest model)
-        {
-            // Verifica se o usuario tem permissao na lista
-            var permissao = await ValidaParticipante(listaId);
-            if (permissao == false)
-                throw new ApiExcecao(403, "Usuario não pode adicionar produto na lista pois não participa desta lista");
-
-            Produto entidade = await GaranteProduto(model);
-
-            await this.repositorioProdutoLista.InserirAsync(new ProdutoLista(entidade.Id, listaId));
-        }
-
-
-
         #region [ Métodos privados ]
-
-        private async Task<Produto> GaranteProduto(ProdutoRequest model)
-        {
-            Produto entidade = null;
-            // Novo produto
-            if (model.Id == null)
-            {
-                Categoria categoria = await GaranteCategoria(model);
-
-                model.CategoriaId = categoria.Id;
-                entidade = this.mapper.Map<Produto>(await this.negocioProduto.Criar(model));
-            }
-            else
-            {
-                // Verifica se o produto existe
-                entidade = await this.repositorioProduto.ObterAsync(model.Id);
-                if (entidade == null)
-                    throw new ApiExcecao(422, "Este produto não existe");
-
-                entidade = this.mapper.Map<Produto>(model);
-            }
-
-            return entidade;
-        }
-
-        private async Task<Categoria> GaranteCategoria(ProdutoRequest model)
-        {
-            Categoria categoria = null;
-            // Nova categoria
-            if (model.CategoriaId == null)
-                categoria = this.mapper.Map<Categoria>(await this.negocioCategoria.Criar(model.Categoria));
-            else
-            {
-                // Verifica se o produto existe
-                categoria = await this.repositorioCategoria.ObterAsync(model.CategoriaId);
-                if (categoria == null)
-                    throw new ApiExcecao(422, "Esta categoria não existe");
-
-                categoria = this.mapper.Map<Categoria>(model.Categoria);
-            }
-
-            return categoria;
-        }
 
         /// <summary>
         /// Valida se o usuario atual faz parte da Lista
@@ -285,18 +216,6 @@ namespace ListaCompra.Negocio
         /// Verifica se o usuario é Membro da lista
         /// </summary>
         /// <param name="usuario"></param>
-        private async Task<bool> ValidaPermissaoMembroAsync(int listaId)
-        {
-            // Recupera permissao do usuario atual
-            GrupoUsuario permissaoUsuario = await RecuperaPermissao(listaId);
-
-            return permissaoUsuario.PermissaoId == (int)API.Permissao.Membro;
-        }
-
-        /// <summary>
-        /// Verifica se o usuario é Membro da lista
-        /// </summary>
-        /// <param name="usuario"></param>
         private async Task<bool> ValidaPermissaoDonoAsync(int listaId)
         {
             // Recupera permissao do usuario atual
@@ -326,19 +245,6 @@ namespace ListaCompra.Negocio
             Task<IdentityUser> usuarioAtualTask = this.userManager.GetUserAsync(this.httpContext.User); // recupera usuario atual
             IdentityUser usuarioAtual = await usuarioAtualTask;
             return usuarioAtual;
-        }
-
-        /// <summary>
-        /// Recupera usuario pelo Nome
-        /// </summary>
-        /// <param name="nomeUsuario"></param>
-        /// <returns></returns>
-        private async Task<IdentityUser> RecuperaUsuarioPeloNome(string nomeUsuario)
-        {
-            IdentityUser entidadeUsuario = await this.userManager.FindByNameAsync(nomeUsuario);
-            if (entidadeUsuario == null)
-                throw new ApiExcecao(404, "Usuario não existe");
-            return entidadeUsuario;
         }
 
         #endregion [ Métodos privados ]

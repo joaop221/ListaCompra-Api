@@ -72,18 +72,6 @@ namespace ListaCompra.API.Controllers
             => await this.negocioLista.Criar(model);
 
         /// <summary>
-        /// Adiciona novo produto na lista
-        /// </summary>
-        /// <returns>Resultado do check</returns>
-        [SwaggerResponse(200, "Sucesso")]
-        [SwaggerResponse(503, Description = "API ou algum recurso que ela depende está fora do ar")]
-        [SwaggerResponse(500, Description = "Erro interno desconhecido")]
-        [HttpPost("{listaId}/Produto")]
-        public async Task AdicionaProduto(int listaId, ProdutoRequest model)
-            => await this.negocioLista.AdicionaProduto(listaId, model);
-
-
-        /// <summary>
         /// Criar
         /// </summary>
         /// <returns>Resultado do check</returns>
