@@ -2,6 +2,9 @@ using FluentValidation;
 
 namespace ListaCompra.Modelo.API.Lista
 {
+    /// <summary>
+    /// Reuqest para listas
+    /// </summary>
     public class ListaRequest
     {
         /// <summary>

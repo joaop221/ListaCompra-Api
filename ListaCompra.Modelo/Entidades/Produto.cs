@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ListaCompra.Modelo.Base;
 
 namespace ListaCompra.Modelo.Entidades
 {
@@ -15,46 +16,46 @@ namespace ListaCompra.Modelo.Entidades
         /// </summary>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public virtual int Id { get; set; }
 
         /// <summary>
         /// Nome do produtos
         /// </summary>
         [Required]
         [StringLength(150)]
-        public string Nome { get; set; }
+        public virtual string Nome { get; set; }
 
         /// <summary>
         /// Descicao do prduto
         /// </summary>
         [StringLength(300)]
-        public string Descricao { get; set; }
+        public virtual string Descricao { get; set; }
 
         /// <summary>
         /// Quantidade do produto
         /// </summary>
-        public int Quantidade { get; set; }
+        public virtual int Quantidade { get; set; }
 
         /// <summary>
         /// Valor do produtos(unicade)
         /// </summary>
-        public double Valor { get; set; }
+        public virtual double Valor { get; set; }
 
         /// <summary>
         /// Categoria do produtos
         /// </summary>
         [ForeignKey("CategoriaId")]
-        public Categoria Categoria { get; set; }
+        public virtual Categoria Categoria { get; set; }
 
         /// <summary>
         /// Id da categoria
         /// </summary>
-        public int CategoriaId { get; set; }
+        public virtual int CategoriaId { get; set; }
 
         /// <summary>
         /// Lista de listas (N para N)
         /// </summary>
-        public ICollection<ProdutoLista> ProdutoListas { get; set; }
+        public virtual ICollection<ProdutoLista> ProdutoListas { get; set; }
 
     }
 }

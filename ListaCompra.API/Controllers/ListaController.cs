@@ -12,7 +12,7 @@ namespace ListaCompra.API.Controllers
     /// <summary>
     /// Lista
     /// </summary>
-    [Route("[controller]/[action]")]
+    [Route("[controller]")]
     [ApiController]
     [ValidacaoFiltro]
     [Authorize]

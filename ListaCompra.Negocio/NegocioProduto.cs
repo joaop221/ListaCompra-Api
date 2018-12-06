@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 using System.Transactions;
 using AutoMapper;
 using ListaCompra.Modelo.API.Produto;
+using ListaCompra.Modelo.Base;
 using ListaCompra.Modelo.Entidades;
-using ListaCompra.Modelo.Interfaces;
 
 namespace ListaCompra.Negocio
 {

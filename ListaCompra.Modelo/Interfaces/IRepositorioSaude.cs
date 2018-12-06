@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using ListaCompra.Modelo.Entidades;
+using ListaCompra.Modelo.Base;
 
 namespace ListaCompra.Modelo.Interfaces
 {

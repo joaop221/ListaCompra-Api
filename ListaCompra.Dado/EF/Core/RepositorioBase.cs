@@ -2,8 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using ListaCompra.Infraestrutura.Reflexao;
-using ListaCompra.Modelo.Entidades;
-using ListaCompra.Modelo.Interfaces;
+using ListaCompra.Modelo.Base;
 
 namespace ListaCompra.Dado.EF.Core
 {

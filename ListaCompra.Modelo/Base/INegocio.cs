@@ -1,4 +1,4 @@
-namespace ListaCompra.Modelo.Interfaces
+namespace ListaCompra.Modelo.Base
 {
     /// <summary>
     /// Interface base para classes de negocio

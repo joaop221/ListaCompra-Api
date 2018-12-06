@@ -12,7 +12,7 @@ namespace ListaCompra.API.Controllers
     /// <summary>
     /// Conta
     /// </summary>
-    [Route("[controller]/[action]")]
+    [Route("[controller]")]
     [ApiController]
     [AllowAnonymous]
     public class ContaController : ControllerBase
@@ -36,7 +36,7 @@ namespace ListaCompra.API.Controllers
         [SwaggerResponse(422, "Erro de validação", typeof(IdentityError[]))]
         [SwaggerResponse(503, Description = "API ou algum recurso que ela depende está fora do ar")]
         [SwaggerResponse(500, Description = "Erro interno desconhecido")]
-        [HttpPost]
+        [HttpPost("Login")]
         [AllowAnonymous]
         public async Task<LoginResponse> Login([FromBody] LoginRequest model)
             => await this.negocioConta.Login(model);
@@ -49,7 +49,7 @@ namespace ListaCompra.API.Controllers
         [SwaggerResponse(422, "Erro de validação", typeof(IdentityError[]))]
         [SwaggerResponse(503, Description = "API ou algum recurso que ela depende está fora do ar")]
         [SwaggerResponse(500, Description = "Erro interno desconhecido")]
-        [HttpPost]
+        [HttpPost("Registro")]
         [AllowAnonymous]
         public async Task<RegistroResponse> Registro([FromBody] RegistroRequest model)
             => await this.negocioConta.Registro(model);

@@ -1,10 +1,9 @@
 using System;
 using System.Threading.Tasks;
 using ListaCompra.Dado.EF.Contextos;
-using ListaCompra.Modelo.Entidades;
+using ListaCompra.Modelo.Base;
 using ListaCompra.Modelo.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace ListaCompra.Dado.Repositorios
 {
