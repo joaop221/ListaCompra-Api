@@ -31,9 +31,7 @@ namespace ListaCompra.API.Controllers
         /// <returns>Resultado do check</returns>
         [SwaggerResponse(200, "Sucesso")]
         [SwaggerResponse(500, Description = "API ou algum recurso que ela depende está fora do ar")]
-        [SwaggerOperation(Tags = new[] { "HealfCheck" })]
-        [HttpGet]
-        [Route("health")]
+        [HttpGet("health")]
         public async Task<IActionResult> Check()
         {
             await this._negocio.Check();

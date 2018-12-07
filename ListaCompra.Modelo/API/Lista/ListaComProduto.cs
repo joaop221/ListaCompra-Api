@@ -1,11 +1,13 @@
+using System.Collections.Generic;
 using ListaCompra.Modelo.API.Grupo;
+using ListaCompra.Modelo.API.Produto;
 
 namespace ListaCompra.Modelo.API.Lista
 {
     /// <summary>
     /// Response de lista
     /// </summary>
-    public class ListaResponse
+    public class ListaComProduto
     {
         /// <summary>
         /// Id da lista
@@ -21,5 +23,10 @@ namespace ListaCompra.Modelo.API.Lista
         /// Grupo
         /// </summary>
         public GrupoResponse Grupo { get; set; }
+
+        /// <summary>
+        /// Lista de produtos
+        /// </summary>
+        public List<ProdutoResponse> Produtos { get; set; }
     }
 }

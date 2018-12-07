@@ -11,6 +11,24 @@ namespace ListaCompra.Modelo.Entidades
     public class ProdutoLista : Entidade
     {
         /// <summary>
+        /// Contrutor padrão
+        /// </summary>
+        public ProdutoLista()
+        {
+        }
+
+        /// <summary>
+        /// Contrutor que inicia os IDs
+        /// </summary>
+        /// <param name="produtoId"></param>
+        /// <param name="listaId"></param>
+        public ProdutoLista(int produtoId, int listaId)
+        {
+            this.ProdutoId = produtoId;
+            this.ListaId = listaId;
+        }
+
+        /// <summary>
         /// Id da lista x produto
         /// </summary>
         [Key]
