@@ -24,6 +24,7 @@ namespace ListaCompra.Modelo.API.Grupo
         public GrupoRequestValidacao()
         {
             RuleFor(x => x.Nome)
+                .NotEmpty()
                 .MaximumLength(150);
         }
     }

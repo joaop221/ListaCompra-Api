@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using ListaCompra.Modelo.Entidades;
 
-namespace ListaCompra.Modelo.Interfaces
+namespace ListaCompra.Modelo.Base
 {
     /// <summary>
     /// Interface base para repositorios
@@ -44,7 +44,6 @@ namespace ListaCompra.Modelo.Interfaces
         /// <summary>
         /// Atualiza a lista de objetos informados
         /// </summary>
-        /// <typeparam name="T">Tipo de objeto para ser atualizado</typeparam>
         /// <param name="itens">         Lista de entidades</param>
         /// <param name="exclusaoLogica"></param>
         /// <param name="reattempts">    </param>
@@ -75,10 +74,9 @@ namespace ListaCompra.Modelo.Interfaces
         /// <summary>
         /// Exclui os objetos com as chaves informadas
         /// </summary>
-        /// <typeparam name="T">Tipo de entidade de banco</typeparam>
         /// <param name="chaves">        Lista de chaves para exclusão</param>
         /// <param name="exclusaoFisica">Tipo de exclusão</param>
-        Task ExcluirAsync(List<int> chaves, bool exclusaoFisica = false);
+        Task ExcluirAsync(bool exclusaoFisica = false, params object[] chaves);
 
         /// <summary>
         /// Retorna a lista de objetos aplicando um filtro
@@ -97,21 +95,15 @@ namespace ListaCompra.Modelo.Interfaces
         /// </summary>
         /// <param name="chave"></param>
         /// <returns>Objeto</returns>
-        Task<TEntidade> ObterAsync(int chave);
-
-        /// <summary>
-        /// Retorna o objeto solicitado
-        /// </summary>
-        /// <param name="chave"></param>
-        /// <returns>Objeto</returns>
-        Task<TEntidade> ObterAsync(object[] chave);
+        Task<TEntidade> ObterAsync(object chave);
 
         /// <summary>
         /// Retorna o objeto solicitado
         /// </summary>
         /// <param name="filtro"></param>
+        /// <param name="carregarEntidades">Entidades que devem ser carregadas na consulta</param>
         /// <returns>Objeto</returns>
-        Task<TEntidade> ObterAsync(Expression<Func<TEntidade, bool>> filtro);
+        Task<TEntidade> ObterAsync(Expression<Func<TEntidade, bool>> filtro, ListaEntidade<TEntidade> carregarEntidades = null);
 
         #endregion [ Métodos Obter ]
 
@@ -123,14 +115,15 @@ namespace ListaCompra.Modelo.Interfaces
         /// <param name="filtro">    Expressão a ser usada como filtro</param>
         /// <param name="ordenacao"> </param>
         /// <param name="ascendente"></param>
+        /// <param name="carregarEntidades">Entidades que devem ser carregadas na consulta</param>
         /// <returns>Lista de objetos encontrados</returns>
-        Task<List<TEntidade>> ConsultarOrdenadoAsync<TKey>(Expression<Func<TEntidade, bool>> filtro, Expression<Func<TEntidade, TKey>> ordenacao, bool ascendente = true);
+        Task<List<TEntidade>> ConsultarOrdenadoAsync<TKey>(Expression<Func<TEntidade, bool>> filtro, Expression<Func<TEntidade, TKey>> ordenacao, ListaEntidade<TEntidade> carregarEntidades = null, bool ascendente = true);
 
         /// <summary>
         /// Retorna a lista de objetos
         /// </summary>
         /// <returns>Lista de objetos na base</returns>
-        Task<List<TEntidade>> ConsultarAsync(List<int> chaves);
+        Task<List<TEntidade>> ConsultarAsync(params object[] chaves);
 
         /// <summary>
         /// Retorna a lista de objetos
@@ -139,8 +132,9 @@ namespace ListaCompra.Modelo.Interfaces
         /// <param name="paginaAtual"></param>
         /// <param name="itensPagina"></param>
         /// <param name="ascendente"> </param>
+        /// <param name="carregarEntidades">Entidades que devem ser carregadas na consulta</param>
         /// <returns></returns>
-        Task<List<TEntidade>> ConsultarAsync(Expression<Func<TEntidade, bool>> filtro, int paginaAtual = -1, int itensPagina = -1, bool ascendente = true);
+        Task<List<TEntidade>> ConsultarAsync(Expression<Func<TEntidade, bool>> filtro, ListaEntidade<TEntidade> carregarEntidades = null, int paginaAtual = -1, int itensPagina = -1, bool ascendente = true);
 
         /// <summary>
         /// Retorna a quantidade de objetos encontrados com o filtro informado

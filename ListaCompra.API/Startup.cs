@@ -126,6 +126,8 @@ namespace ListaCompra.API
 
         private void ConfiguraSeguranca(IServiceCollection services)
         {
+            services.AddAuthorization();
+
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
                 options.Password.RequireDigit = false;

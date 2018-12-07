@@ -5,8 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using ListaCompra.Dado.EF.Core;
-using ListaCompra.Modelo.Entidades;
-using ListaCompra.Modelo.Interfaces;
+using ListaCompra.Modelo.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -258,9 +257,9 @@ namespace ListaCompra.Dado.Repositorios
         /// <param name="entidade">      Entidade</param>
         /// <param name="chaves">        Lista de chaves para exclusão</param>
         /// <param name="exclusaoFisica">Tipo de exclusão</param>
-        public async Task ExcluirAsync(List<int> chaves, bool exclusaoFisica = false)
+        public async Task ExcluirAsync(bool exclusaoFisica = false, params object[] chaves)
         {
-            if (chaves.Count == 0)
+            if (chaves.Length == 0)
                 return;
 
             //Efetua a exclusão dos itens
@@ -270,13 +269,12 @@ namespace ListaCompra.Dado.Repositorios
             DbSet<TEntidade> tabela = this.Db.Set<TEntidade>();
             var itens = new List<TEntidade>();
 
-            chaves.ForEach(i =>
+            foreach (var i in chaves)
             {
                 TEntidade entidade = tabela.Find(i);
                 if (entidade != null)
                     itens.Add(entidade);
             }
-            );
 
             //Exclui todos os itens
             if (itens.Count > 0)
@@ -316,17 +314,15 @@ namespace ListaCompra.Dado.Repositorios
         /// </summary>
         /// <param name="cod_anexo">ID do item</param>
         /// <returns>Objeto</returns>
-        public async Task<TEntidade> ObterAsync(int chave)
+        public async Task<TEntidade> ObterAsync(object chave)
         {
             var retorno = default(TEntidade);
 
             //Busca o objeto solicitado
-
             this.Db.ChangeTracker.AutoDetectChangesEnabled = false;
 
             DbSet<TEntidade> tabela = this.Db.Set<TEntidade>();
-
-            retorno = tabela.Find(chave);
+            retorno = await tabela.FindAsync(chave);
 
             //Retorna
             return retorno;
@@ -336,8 +332,9 @@ namespace ListaCompra.Dado.Repositorios
         /// Retorna o objeto solicitado
         /// </summary>
         /// <param name="cod_anexo">ID do item</param>
+        /// <param name="carregarEntidades">Entidades que devem ser carregadas na consulta</param>
         /// <returns>Objeto</returns>
-        public async Task<TEntidade> ObterAsync(object[] chave)
+        public async Task<TEntidade> ObterAsync(Expression<Func<TEntidade, bool>> filtro, ListaEntidade<TEntidade> carregarEntidades = null)
         {
             var retorno = default(TEntidade);
 
@@ -345,31 +342,17 @@ namespace ListaCompra.Dado.Repositorios
 
             this.Db.ChangeTracker.AutoDetectChangesEnabled = false;
 
-            DbSet<TEntidade> tabela = this.Db.Set<TEntidade>();
-            retorno = tabela.Find(chave);
+            IQueryable<TEntidade> tabela = this.Db.Set<TEntidade>().Where(filtro);
+
+            tabela = IncluiEntidades(carregarEntidades, tabela);
+
+            retorno = await tabela.FirstOrDefaultAsync();
 
             //Retorna
             return retorno;
         }
-        /// <summary>
-        /// Retorna o objeto solicitado
-        /// </summary>
-        /// <param name="cod_anexo">ID do item</param>
-        /// <returns>Objeto</returns>
-        public async Task<TEntidade> ObterAsync(Expression<Func<TEntidade, bool>> filtro)
-        {
-            var retorno = default(TEntidade);
 
-            //Busca o objeto solicitado
 
-            this.Db.ChangeTracker.AutoDetectChangesEnabled = false;
-
-            DbSet<TEntidade> tabela = this.Db.Set<TEntidade>();
-            retorno = await tabela.FirstOrDefaultAsync(filtro);
-
-            //Retorna
-            return retorno;
-        }
 
         #endregion [ Métodos Obter ]
 
@@ -379,8 +362,9 @@ namespace ListaCompra.Dado.Repositorios
         /// Retorna a lista de objetos aplicando um filtro
         /// </summary>
         /// <param name="filtro">Expressão a ser usada como filtro</param>
+        /// <param name="carregarEntidades">Entidades que devem ser carregadas na consulta</param>
         /// <returns>Lista de objetos encontrados</returns>
-        public async Task<List<TEntidade>> ConsultarOrdenadoAsync<TKey>(Expression<Func<TEntidade, bool>> filtro, Expression<Func<TEntidade, TKey>> ordenacao, bool ascendente = true)
+        public async Task<List<TEntidade>> ConsultarOrdenadoAsync<TKey>(Expression<Func<TEntidade, bool>> filtro, Expression<Func<TEntidade, TKey>> ordenacao, ListaEntidade<TEntidade> carregarEntidades = null, bool ascendente = true)
         {
             //Busca o objeto solicitado
 
@@ -400,21 +384,23 @@ namespace ListaCompra.Dado.Repositorios
                 else
                     tabela = tabela.OrderBy(ordenacao);
 
+            tabela = IncluiEntidades(carregarEntidades, tabela);
+
             //Retorna
-            return tabela.ToList();
+            return await tabela.ToListAsync();
         }
 
         /// <summary>
         /// Retorna a lista de objetos
         /// </summary>
         /// <returns>Lista de objetos na base</returns>
-        public async Task<List<TEntidade>> ConsultarAsync(List<int> chaves)
+        public async Task<List<TEntidade>> ConsultarAsync(params object[] chaves)
         {
             var retorno = new List<TEntidade>();
 
             //Busca o objeto solicitado
 
-            chaves.ForEach(async i =>
+            chaves.ToList().ForEach(async i =>
             {
                 TEntidade entidade = await ObterAsync(i);
                 if (entidade != null)
@@ -422,10 +408,10 @@ namespace ListaCompra.Dado.Repositorios
             });
 
             //Retorna
-            return retorno;
+            return await Task.FromResult(retorno);
         }
 
-        public async Task<List<TEntidade>> ConsultarAsync(Expression<Func<TEntidade, bool>> filtro, int paginaAtual = -1, int itensPagina = -1, bool ascendente = true)
+        public async Task<List<TEntidade>> ConsultarAsync(Expression<Func<TEntidade, bool>> filtro, ListaEntidade<TEntidade> carregarEntidades = null, int paginaAtual = -1, int itensPagina = -1, bool ascendente = true)
         {
             //Busca o objeto solicitado
 
@@ -438,12 +424,14 @@ namespace ListaCompra.Dado.Repositorios
             else
                 tabela = this.Db.Set<TEntidade>().Where(filtro);
 
+            tabela = IncluiEntidades(carregarEntidades, tabela);
+
             //Efetua a busca no banco
             if (paginaAtual > -1 && itensPagina > -1)
                 tabela = tabela.Skip(paginaAtual * itensPagina).Take(itensPagina);
 
             //Retorna
-            return tabela.ToList();
+            return await tabela.ToListAsync();
         }
 
         /// <summary>
@@ -466,7 +454,7 @@ namespace ListaCompra.Dado.Repositorios
             else
                 retorno = tabela.Count();
 
-            return retorno;
+            return await Task.FromResult(retorno);
         }
 
         #endregion [ Métodos Listar ]
@@ -481,6 +469,24 @@ namespace ListaCompra.Dado.Repositorios
         {
             IdentityUser logado = await this.userManager.GetUserAsync(this.httpContextAccessor.HttpContext.User);
             return logado != null ? logado.UserName : string.Concat(Environment.UserDomainName, @"\", Environment.UserName);
+        }
+
+        /// <summary>
+        /// Inclui entidades na consulta
+        /// </summary>
+        /// <param name="carregarEntidades"></param>
+        /// <param name="tabela"></param>
+        /// <returns></returns>
+        protected static IQueryable<TEntidade> IncluiEntidades(ListaEntidade<TEntidade> carregarEntidades, IQueryable<TEntidade> tabela)
+        {
+            if (carregarEntidades != null && carregarEntidades.Itens != null && carregarEntidades.Itens.Any())
+                foreach (Expression<Func<TEntidade, IEntidade>> path in carregarEntidades.Itens)
+                    tabela = tabela.Include(path);
+
+            if (carregarEntidades != null && carregarEntidades.Itens_collection != null && carregarEntidades.Itens_collection.Any())
+                foreach (Expression<Func<TEntidade, IEnumerable<IEntidade>>> path in carregarEntidades.Itens_collection)
+                    tabela = tabela.Include(path);
+            return tabela;
         }
 
         #endregion [ Métodos Auxiliares ]

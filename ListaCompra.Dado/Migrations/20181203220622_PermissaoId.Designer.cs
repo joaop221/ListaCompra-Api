@@ -4,14 +4,16 @@ using ListaCompra.Dado.EF.Contextos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ListaCompra.Dado.Migrations
 {
     [DbContext(typeof(ListaCompraBDContexto))]
-    partial class ListaCompraBDContextoModelSnapshot : ModelSnapshot
+    [Migration("20181203220622_PermissaoId")]
+    partial class PermissaoId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,27 +96,9 @@ namespace ListaCompra.Dado.Migrations
 
                     b.Property<int>("GrupoId");
 
-                    b.Property<DateTime?>("DataAlteracao")
-                        .HasColumnName("DataAlteracao");
-
-                    b.Property<DateTime>("DataInclusao")
-                        .HasColumnName("DataInclusao");
-
-                    b.Property<bool>("Excluido")
-                        .HasColumnName("Excluido");
-
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("LoginAlteracao")
-                        .HasColumnName("LoginAlteracao")
-                        .HasMaxLength(200);
-
-                    b.Property<string>("LoginInclusao")
-                        .IsRequired()
-                        .HasColumnName("LoginInclusao")
-                        .HasMaxLength(200);
 
                     b.Property<int>("PermissaoId");
 
@@ -198,9 +182,9 @@ namespace ListaCompra.Dado.Migrations
                     b.ToTable("Permissao");
 
                     b.HasData(
-                        new { PermissaoId = 1, DataInclusao = new DateTime(2018, 12, 5, 17, 41, 27, 394, DateTimeKind.Utc), Excluido = false, LoginInclusao = "MIGRATION", Nome = "Dono" },
-                        new { PermissaoId = 2, DataInclusao = new DateTime(2018, 12, 5, 17, 41, 27, 395, DateTimeKind.Utc), Excluido = false, LoginInclusao = "MIGRATION", Nome = "Administrador" },
-                        new { PermissaoId = 3, DataInclusao = new DateTime(2018, 12, 5, 17, 41, 27, 395, DateTimeKind.Utc), Excluido = false, LoginInclusao = "MIGRATION", Nome = "Contribuidor" }
+                        new { PermissaoId = 1, DataInclusao = new DateTime(2018, 12, 3, 22, 6, 22, 80, DateTimeKind.Utc), Excluido = false, LoginInclusao = "MIGRATION", Nome = "Dono" },
+                        new { PermissaoId = 2, DataInclusao = new DateTime(2018, 12, 3, 22, 6, 22, 81, DateTimeKind.Utc), Excluido = false, LoginInclusao = "MIGRATION", Nome = "Administrador" },
+                        new { PermissaoId = 3, DataInclusao = new DateTime(2018, 12, 3, 22, 6, 22, 81, DateTimeKind.Utc), Excluido = false, LoginInclusao = "MIGRATION", Nome = "Contribuidor" }
                     );
                 });
 
@@ -313,9 +297,9 @@ namespace ListaCompra.Dado.Migrations
                     b.ToTable("Funcao");
 
                     b.HasData(
-                        new { Id = "59688913-da1d-4b34-b313-cd7c115b012a", ConcurrencyStamp = "14ba3028-10c3-4605-af97-b49871a27a28", Name = "Admin", NormalizedName = "ADMIN" },
-                        new { Id = "ecd069dc-3094-4f8c-8717-b19f1044b402", ConcurrencyStamp = "693c7a26-0be0-4093-8844-74072c866153", Name = "Comum", NormalizedName = "COMUM" },
-                        new { Id = "64d38884-4240-462f-a6c6-8c123128878a", ConcurrencyStamp = "59e65a21-14f1-4eee-8161-9ab6a93acef5", Name = "Moderador", NormalizedName = "MODERADOR" }
+                        new { Id = "a9350483-529a-40a9-b135-e1dcee70946d", ConcurrencyStamp = "f599b1f2-d676-456a-b7a5-70e9c00cffb0", Name = "Admin", NormalizedName = "ADMIN" },
+                        new { Id = "bfc0b258-070d-4c00-bf08-814443582f75", ConcurrencyStamp = "51087dd1-4859-4732-ac7c-f36ef26d54f7", Name = "Comum", NormalizedName = "COMUM" },
+                        new { Id = "4cb57189-60de-4712-a527-ba0d345800dc", ConcurrencyStamp = "949974ea-a6e0-4a99-86cc-2a1efa676700", Name = "Moderador", NormalizedName = "MODERADOR" }
                     );
                 });
 

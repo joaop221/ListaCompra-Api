@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ListaCompra.Modelo.Base;
 
 namespace ListaCompra.Modelo.Entidades
 {
@@ -14,19 +15,19 @@ namespace ListaCompra.Modelo.Entidades
         /// </summary>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public virtual int Id { get; set; }
 
         /// <summary>
         /// Nome da categoria
         /// </summary>
         [StringLength(100)]
         [Required]
-        public string Nome { get; set; }
+        public virtual string Nome { get; set; }
 
         /// <summary>
         /// Decricao da categoria
         /// </summary>
         [StringLength(300)]
-        public string Descricao { get; set; }
+        public virtual string Descricao { get; set; }
     }
 }

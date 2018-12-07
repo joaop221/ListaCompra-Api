@@ -1,11 +1,12 @@
 using FluentValidation;
+using ListaCompra.Modelo.API.Grupo;
 
 namespace ListaCompra.Modelo.API.Lista
 {
     /// <summary>
     /// Reuqest para listas
     /// </summary>
-    public class ListaRequest
+    public class ListaComGrupoRequest
     {
         /// <summary>
         /// Titulo da lista
@@ -13,27 +14,27 @@ namespace ListaCompra.Modelo.API.Lista
         public string Titulo { get; set; }
 
         /// <summary>
-        /// Id do grupo
+        /// Grupo
         /// </summary>
-        public int GrupoId { get; set; }
+        public GrupoRequest Grupo { get; set; }
     }
 
 
     /// <summary>
     /// Validacao
     /// </summary>
-    public class ListaRequestValidacao : AbstractValidator<ListaRequest>
+    public class ListaComGrupoRequestValidacao : AbstractValidator<ListaComGrupoRequest>
     {
         /// <summary>
         /// Rergras
         /// </summary>
-        public ListaRequestValidacao()
+        public ListaComGrupoRequestValidacao()
         {
             RuleFor(x => x.Titulo)
                 .NotEmpty()
                 .MaximumLength(100);
 
-            RuleFor(x => x.GrupoId)
+            RuleFor(x => x.Grupo)
                 .NotEmpty();
         }
     }

@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using ListaCompra.Modelo.API.Categoria;
+using ListaCompra.Modelo.Base;
 using ListaCompra.Modelo.Entidades;
-using ListaCompra.Modelo.Interfaces;
 
 namespace ListaCompra.Negocio
 {
@@ -33,7 +33,17 @@ namespace ListaCompra.Negocio
         /// </summary>
         public async Task<List<CategoriaResponse>> Listar()
         {
-            List<Categoria> entidade = await this.repositorio.ConsultarAsync(x => true);
+            List<Categoria> entidade = await this.repositorio.ConsultarAsync(x => x.Excluido == false);
+
+            return this.mapper.Map<List<CategoriaResponse>>(entidade);
+        }
+
+        /// <summary>
+        /// Listar
+        /// </summary>
+        public async Task<List<CategoriaResponse>> Listar(string termo)
+        {
+            List<Categoria> entidade = await this.repositorio.ConsultarAsync(x => x.Nome.Contains(termo) && x.Excluido == false);
 
             return this.mapper.Map<List<CategoriaResponse>>(entidade);
         }
